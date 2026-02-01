@@ -9,14 +9,13 @@ if (highlight_mode && mouse_check_button_pressed(mb_left))
     var local_x = mx - oBoard.board_offset_x;
     var local_y = my - oBoard.board_offset_y;
 
-    // Convert to cell coordinates
-    var cell_x = local_x div CELL_SIZE;
-    var cell_y = local_y div CELL_SIZE;
-
-    // Bounds check
-    if (cell_x >= 0 && cell_x < BOARD_SIZE &&
-        cell_y >= 0 && cell_y < BOARD_SIZE)
+    // Bounds check on local coordinates first (must be within board area)
+    if (local_x >= 0 && local_x < BOARD_SIZE * CELL_SIZE &&
+        local_y >= 0 && local_y < BOARD_SIZE * CELL_SIZE)
     {
+        // Convert to cell coordinates
+        var cell_x = local_x div CELL_SIZE;
+        var cell_y = local_y div CELL_SIZE;
         // Check if there's a pawn at this cell
         var has_pawn = false;
         with (oPawn)
