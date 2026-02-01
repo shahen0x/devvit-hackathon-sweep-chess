@@ -48,6 +48,22 @@ if (!is_moving && mouse_check_button_pressed(mb_left))
     var knight_px = board.board_offset_x + cell_x * CELL_SIZE;
     var knight_py = board.board_offset_y + cell_y * CELL_SIZE;
     
+    // Check if clicking on this piece - clear all button states first
+    if (point_in_rectangle(mouse_x, mouse_y, knight_px, knight_py, knight_px + CELL_SIZE, knight_py + CELL_SIZE))
+    {
+        // Clear all button highlight states
+        with (oButton)
+        {
+            highlight_mode = false;
+        }
+        
+        // Clear all other piece selections
+        with (oQueen) { is_selected = false; valid_moves = []; }
+        with (oRook) { is_selected = false; valid_moves = []; }
+        with (oBishop) { is_selected = false; valid_moves = []; }
+        with (oKnight) { if (id != other.id) { is_selected = false; valid_moves = []; } }
+    }
+    
     // Check if mouse/touch is within the knight's bounds
     if (mouse_x >= knight_px && mouse_x < knight_px + CELL_SIZE &&
         mouse_y >= knight_py && mouse_y < knight_py + CELL_SIZE)
