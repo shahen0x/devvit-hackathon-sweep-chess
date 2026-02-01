@@ -30,5 +30,8 @@
   },
   "triggers": {
     "onAppInstall": "/internal/on-app-install"
+  },
+  "dev": {
+    "subreddit": "chess_war_dev"
   }
 }
