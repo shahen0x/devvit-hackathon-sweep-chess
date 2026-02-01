@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"piece_try_move_to_cell",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"piece_try_move_to_cell",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"piece_handle_movement",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"piece_handle_movement",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
