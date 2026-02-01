@@ -26,10 +26,12 @@
   "resources":[
     {"id":{"name":"Font1","path":"fonts/Font1/Font1.yy",},},
     {"id":{"name":"oBoard","path":"objects/oBoard/oBoard.yy",},},
+    {"id":{"name":"oPawn","path":"objects/oPawn/oPawn.yy",},},
     {"id":{"name":"oQueen","path":"objects/oQueen/oQueen.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"size","path":"scripts/size/size.yy",},},
     {"id":{"name":"sCell","path":"sprites/sCell/sCell.yy",},},
+    {"id":{"name":"sPawn","path":"sprites/sPawn/sPawn.yy",},},
     {"id":{"name":"sQueen","path":"sprites/sQueen/sQueen.yy",},},
   ],
   "resourceType":"GMProject",

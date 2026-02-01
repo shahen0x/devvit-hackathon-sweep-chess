@@ -15,10 +15,8 @@ if (is_selected && array_length(valid_moves) > 0)
     draw_set_alpha(1.0);
 }
 
-// pixel position on screen
-var px = board.board_offset_x + cell_x * CELL_SIZE;
-var py = board.board_offset_y + cell_y * CELL_SIZE;
-// Draw a placeholder rectangle if no sprite
-draw_set_color(c_purple);
-draw_rectangle(px, py, px + CELL_SIZE, py + CELL_SIZE, false);
-draw_set_color(c_white);
+// Draw a placeholder rectangle if no sprite (using px, py for smooth movement)
+//draw_set_color(c_purple);
+//draw_rectangle(px, py, px + CELL_SIZE, py + CELL_SIZE, false);
+//draw_set_color(c_white);
+draw_sprite(sprite_index, image_index, px, py);
