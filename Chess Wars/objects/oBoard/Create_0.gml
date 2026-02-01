@@ -13,7 +13,18 @@ for (var hor = 0; hor < BOARD_SIZE; hor++)
     board[hor] = array_create(BOARD_SIZE);
     for (var vert = 0; vert < BOARD_SIZE; vert++)
     {
-        board[hor][vert] = 0; // empty cell (you can store pieces later)
+        board[hor][vert] = 0; // 0 = empty, 1 = piece (queen/rook/bishop/knight)
+    }
+}
+
+// Track piece positions (1 = has piece, 0 = empty)
+piece_positions = array_create(BOARD_SIZE);
+for (var i = 0; i < BOARD_SIZE; i++)
+{
+    piece_positions[i] = array_create(BOARD_SIZE);
+    for (var j = 0; j < BOARD_SIZE; j++)
+    {
+        piece_positions[i][j] = 0;
     }
 }
 
@@ -33,6 +44,7 @@ queen.px = board_offset_x;
 queen.py = board_offset_y;
 queen.target_cell_x = 0;
 queen.target_cell_y = 0;
+piece_positions[0][0] = 1; // Mark queen position
 show_debug_message("Queen instance: " + string(queen));
 
 // Spawn rook next to queen at cell (1,0)
@@ -50,6 +62,7 @@ rook.px = board_offset_x + 1 * CELL_SIZE;
 rook.py = board_offset_y;
 rook.target_cell_x = 1;
 rook.target_cell_y = 0;
+piece_positions[1][0] = 1; // Mark rook position
 show_debug_message("Rook instance: " + string(rook));
 
 // Spawn bishop next to rook at cell (2,0)
@@ -67,6 +80,7 @@ bishop.px = board_offset_x + 2 * CELL_SIZE;
 bishop.py = board_offset_y;
 bishop.target_cell_x = 2;
 bishop.target_cell_y = 0;
+piece_positions[2][0] = 1; // Mark bishop position
 show_debug_message("Bishop instance: " + string(bishop));
 
 // Spawn knight next to bishop at cell (3,0)
@@ -84,6 +98,7 @@ knight.px = board_offset_x + 3 * CELL_SIZE;
 knight.py = board_offset_y;
 knight.target_cell_x = 3;
 knight.target_cell_y = 0;
+piece_positions[3][0] = 1; // Mark knight position
 show_debug_message("Knight instance: " + string(knight));
 
 // Spawn random pawns

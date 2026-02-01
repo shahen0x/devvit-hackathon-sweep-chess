@@ -11,10 +11,12 @@ if (is_moving)
     if (dist <= move_speed)
     {
         // Arrived at destination
+        board.piece_positions[cell_x][cell_y] = 0; // Clear old position
         px = target_px;
         py = target_py;
         cell_x = target_cell_x;
         cell_y = target_cell_y;
+        board.piece_positions[cell_x][cell_y] = 1; // Mark new position
         is_moving = false;
         show_debug_message("Rook arrived at: " + string(cell_x) + ", " + string(cell_y));
     }
@@ -60,22 +62,36 @@ if (!is_moving && mouse_check_button_pressed(mb_left))
             // Calculate valid moves (horizontal and vertical only, no diagonals)
             valid_moves = [];
             
-            // Horizontal moves (left and right)
-            for (var i = 0; i < BOARD_SIZE; i++)
+            // Horizontal moves - Right
+            for (var i = cell_x + 1; i < BOARD_SIZE; i++)
             {
-                if (i != cell_x)
-                {
-                    array_push(valid_moves, [i, cell_y]);
-                }
+                if (board.piece_positions[i][cell_y] == 1)
+                    break;
+                array_push(valid_moves, [i, cell_y]);
             }
             
-            // Vertical moves (up and down)
-            for (var j = 0; j < BOARD_SIZE; j++)
+            // Horizontal moves - Left
+            for (var i = cell_x - 1; i >= 0; i--)
             {
-                if (j != cell_y)
-                {
-                    array_push(valid_moves, [cell_x, j]);
-                }
+                if (board.piece_positions[i][cell_y] == 1)
+                    break;
+                array_push(valid_moves, [i, cell_y]);
+            }
+            
+            // Vertical moves - Down
+            for (var j = cell_y + 1; j < BOARD_SIZE; j++)
+            {
+                if (board.piece_positions[cell_x][j] == 1)
+                    break;
+                array_push(valid_moves, [cell_x, j]);
+            }
+            
+            // Vertical moves - Up
+            for (var j = cell_y - 1; j >= 0; j--)
+            {
+                if (board.piece_positions[cell_x][j] == 1)
+                    break;
+                array_push(valid_moves, [cell_x, j]);
             }
         }
         else

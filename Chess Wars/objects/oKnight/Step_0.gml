@@ -11,10 +11,12 @@ if (is_moving)
     if (dist <= move_speed)
     {
         // Arrived at destination
+        board.piece_positions[cell_x][cell_y] = 0; // Clear old position
         px = target_px;
         py = target_py;
         cell_x = target_cell_x;
         cell_y = target_cell_y;
+        board.piece_positions[cell_x][cell_y] = 1; // Mark new position
         is_moving = false;
         show_debug_message("Knight arrived at: " + string(cell_x) + ", " + string(cell_y));
         
@@ -80,7 +82,11 @@ if (!is_moving && mouse_check_button_pressed(mb_left))
                 // Check if move is within board bounds
                 if (new_x >= 0 && new_x < BOARD_SIZE && new_y >= 0 && new_y < BOARD_SIZE)
                 {
-                    array_push(valid_moves, [new_x, new_y]);
+                    // Check if destination is not occupied by friendly pieces
+                    if (board.piece_positions[new_x][new_y] == 0)
+                    {
+                        array_push(valid_moves, [new_x, new_y]);
+                    }
                 }
             }
         }

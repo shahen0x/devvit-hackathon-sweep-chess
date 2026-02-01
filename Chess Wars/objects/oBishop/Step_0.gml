@@ -11,10 +11,12 @@ if (is_moving)
     if (dist <= move_speed)
     {
         // Arrived at destination
+        board.piece_positions[cell_x][cell_y] = 0; // Clear old position
         px = target_px;
         py = target_py;
         cell_x = target_cell_x;
         cell_y = target_cell_y;
+        board.piece_positions[cell_x][cell_y] = 1; // Mark new position
         is_moving = false;
         show_debug_message("Bishop arrived at: " + string(cell_x) + ", " + string(cell_y));
     }
@@ -66,6 +68,8 @@ if (!is_moving && mouse_check_button_pressed(mb_left))
             var dy = cell_y - 1;
             while (dx >= 0 && dy >= 0)
             {
+                if (board.piece_positions[dx][dy] == 1)
+                    break;
                 array_push(valid_moves, [dx, dy]);
                 dx--;
                 dy--;
@@ -76,6 +80,8 @@ if (!is_moving && mouse_check_button_pressed(mb_left))
             dy = cell_y - 1;
             while (dx < BOARD_SIZE && dy >= 0)
             {
+                if (board.piece_positions[dx][dy] == 1)
+                    break;
                 array_push(valid_moves, [dx, dy]);
                 dx++;
                 dy--;
@@ -86,6 +92,8 @@ if (!is_moving && mouse_check_button_pressed(mb_left))
             dy = cell_y + 1;
             while (dx >= 0 && dy < BOARD_SIZE)
             {
+                if (board.piece_positions[dx][dy] == 1)
+                    break;
                 array_push(valid_moves, [dx, dy]);
                 dx--;
                 dy++;
@@ -96,6 +104,8 @@ if (!is_moving && mouse_check_button_pressed(mb_left))
             dy = cell_y + 1;
             while (dx < BOARD_SIZE && dy < BOARD_SIZE)
             {
+                if (board.piece_positions[dx][dy] == 1)
+                    break;
                 array_push(valid_moves, [dx, dy]);
                 dx++;
                 dy++;
