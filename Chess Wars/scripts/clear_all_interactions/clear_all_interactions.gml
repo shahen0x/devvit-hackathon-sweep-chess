@@ -9,32 +9,8 @@ function clear_all_interactions(exclude_instance = noone)
         highlight_mode = false;
     }
     
-    // Clear all piece selections
-    with (oQueen)
-    {
-        if (id != exclude_instance)
-        {
-            is_selected = false;
-            valid_moves = [];
-        }
-    }
-    with (oRook)
-    {
-        if (id != exclude_instance)
-        {
-            is_selected = false;
-            valid_moves = [];
-        }
-    }
-    with (oBishop)
-    {
-        if (id != exclude_instance)
-        {
-            is_selected = false;
-            valid_moves = [];
-        }
-    }
-    with (oKnight)
+    // Clear all piece selections (using parent object oPiece)
+    with (oPiece)
     {
         if (id != exclude_instance)
         {

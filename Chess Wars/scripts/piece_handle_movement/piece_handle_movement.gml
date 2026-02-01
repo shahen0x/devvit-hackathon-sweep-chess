@@ -1,8 +1,7 @@
-/// @function piece_handle_movement(piece_name)
+/// @function piece_handle_movement()
 /// @description Handles smooth movement for a piece, including pawn capture
-/// @param {String} piece_name - Name of the piece for debug messages (e.g., "Queen", "Rook")
-/// @param {Bool} capture_during_move - Whether to capture pawns during movement (false for Knight)
-function piece_handle_movement(piece_name, capture_during_move = true)
+/// Uses instance variables: piece_name, capture_during_move, is_moving, board, etc.
+function piece_handle_movement()
 {
     if (!is_moving) return;
     

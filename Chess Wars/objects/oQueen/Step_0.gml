@@ -1,5 +1,5 @@
 // Handle smooth movement
-piece_handle_movement("Queen", true);
+piece_handle_movement();
 
 // Only allow clicks when not moving
 if (!is_moving && mouse_check_button_pressed(mb_left))
@@ -13,7 +13,7 @@ if (!is_moving && mouse_check_button_pressed(mb_left))
     // Check if mouse/touch is within the queen's bounds
     if (piece_is_clicked())
     {
-        show_debug_message("Queen clicked on");
+        show_debug_message(piece_name + " clicked on");
         
         // Toggle selection
         is_selected = !is_selected;
@@ -115,7 +115,7 @@ if (!is_moving && mouse_check_button_pressed(mb_left))
     {
         if (piece_try_move_to_cell())
         {
-            show_debug_message("Queen moving to: " + string(target_cell_x) + ", " + string(target_cell_y));
+            show_debug_message(piece_name + " moving to: " + string(target_cell_x) + ", " + string(target_cell_y));
         }
     }
 }
