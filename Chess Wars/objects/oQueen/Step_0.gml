@@ -25,6 +25,14 @@ if (is_moving)
         px += lengthdir_x(move_speed, dir);
         py += lengthdir_y(move_speed, dir);
     }
+    
+    // Check for collision with pawns along the path (every frame while moving)
+    var pawn_instance = instance_position(px + CELL_SIZE / 2, py + CELL_SIZE / 2, oPawn);
+    if (pawn_instance != noone)
+    {
+        show_debug_message("Queen captured pawn!");
+        instance_destroy(pawn_instance);
+    }
 }
 
 // Only allow clicks when not moving
