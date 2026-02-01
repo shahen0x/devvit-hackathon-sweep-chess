@@ -191,8 +191,8 @@
   "maintainGms1Font":false,
   "name":"Font1",
   "parent":{
-    "name":"Chess War",
-    "path":"Chess War.yyp",
+    "name":"Fonts",
+    "path":"folders/Fonts.yy",
   },
   "pointRounding":0,
   "ranges":[
