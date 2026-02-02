@@ -11,6 +11,11 @@ py = 0;
 target_cell_x = 0;
 target_cell_y = 0;
 
+// Waypoint system for multi-step movement (used by Knight)
+waypoints = []; // Array of [cell_x, cell_y] waypoints
+current_waypoint = 0;
+use_waypoints = false; // Whether this piece moves through waypoints
+
 // Movement state
 is_moving = false;
 move_speed = 16; // pixels per frame
