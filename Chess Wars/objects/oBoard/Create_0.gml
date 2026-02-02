@@ -8,6 +8,13 @@ cells_travelled = 0;    // Increments for each cell a piece passes through
 cells_travelled_display = 0;  // For animated UI display, counts up to cells_travelled
 cells_counter_timer = 0;      // Timer for slowing down display animation
 
+// Game over state
+game_over = false;
+restart_button_x = room_width / 2 - 60;
+restart_button_y = room_height / 2 + 60;
+restart_button_w = 120;
+restart_button_h = 40;
+
 // Initialize random seed based on today's date
 //var seed = current_year * 10000 + current_month * 100 + current_day;
 //random_set_seed(seed);

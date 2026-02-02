@@ -1,3 +1,6 @@
+// Don't allow clicking if game is over
+if (oBoard.game_over) exit;
+
 // Don't allow clicking if already used
 if (used) exit;
 

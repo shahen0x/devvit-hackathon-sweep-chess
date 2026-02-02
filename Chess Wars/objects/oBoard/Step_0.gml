@@ -14,7 +14,47 @@ else
     cells_counter_timer = 0;
 }
 
-if (mouse_check_button_pressed(mb_left))
+// Check for game over: all pawns dead (only check when no pieces are moving)
+var any_piece_moving = false;
+with (oPiece)
+{
+    if (is_moving)
+    {
+        any_piece_moving = true;
+        break;
+    }
+}
+
+if (!any_piece_moving)
+{
+    // Count remaining pawns
+    var pawn_count = instance_number(oPawn);
+    
+    if (pawn_count == 0 && !game_over)
+    {
+        // Game Over!
+        show_debug_message("GAME OVER - All pawns eliminated!");
+        show_debug_message("Total Moves: " + string(total_moves));
+        show_debug_message("Cells Travelled: " + string(cells_travelled));
+        
+        game_over = true;
+    }
+}
+
+// Handle restart button click during game over
+if (game_over && mouse_check_button_pressed(mb_left))
+{
+    var mx = mouse_x;
+    var my = mouse_y;
+    
+    if (point_in_rectangle(mx, my, restart_button_x, restart_button_y, 
+                          restart_button_x + restart_button_w, restart_button_y + restart_button_h))
+    {
+        room_restart();
+    }
+}
+
+if (!game_over && mouse_check_button_pressed(mb_left))
 {
     // Mouse position
     var mx = mouse_x;

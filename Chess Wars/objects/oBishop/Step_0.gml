@@ -1,6 +1,9 @@
 // Handle smooth movement
 piece_handle_movement();
 
+// Block interactions if game is over
+if (oBoard.game_over) exit;
+
 // Check if any piece is moving (disable all interactions during movement)
 var any_piece_moving = false;
 with (oPiece)

@@ -1,3 +1,6 @@
+// Block interactions if game is over
+if (oBoard.game_over) exit;
+
 // Handle cell selection when highlight mode is active
 if (highlight_mode && mouse_check_button_pressed(mb_left))
 {
