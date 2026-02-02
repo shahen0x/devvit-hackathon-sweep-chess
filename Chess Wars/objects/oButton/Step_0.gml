@@ -53,6 +53,9 @@ if (highlight_mode && mouse_check_button_pressed(mb_left))
             
             // Turn off highlight mode after spawning
             highlight_mode = false;
+            
+            // Mark button as used
+            used = true;
         }
     }
 }
