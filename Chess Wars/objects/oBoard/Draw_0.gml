@@ -24,13 +24,15 @@ for (var hor = 0; hor < BOARD_SIZE; hor++)
 
 draw_set_color(c_white);
 
-// Check if any button has highlight mode active
+// Check if any button has highlight mode active and which piece type
 var any_highlight_mode = false;
+var highlight_piece_type = noone;
 with (oButton)
 {
     if (highlight_mode)
     {
         any_highlight_mode = true;
+        highlight_piece_type = piece_type;
         break;
     }
 }
@@ -38,14 +40,13 @@ with (oButton)
 // Draw highlight overlay for free cells if any button's highlight mode is active
 if (any_highlight_mode)
 {
-    draw_set_alpha(0.5);
-    draw_set_color(c_lime);
+    var is_knight_selected = (highlight_piece_type == oKnight);
     
     for (var hor = 0; hor < BOARD_SIZE; hor++)
     {
         for (var vert = 0; vert < BOARD_SIZE; vert++)
         {
-            // Check if cell is free (no piece and no pawn)
+            // Check if cell has a pawn
             var has_pawn = false;
             with (oPawn)
             {
@@ -56,8 +57,23 @@ if (any_highlight_mode)
                 }
             }
             
-            if (piece_positions[hor][vert] == 0 && !has_pawn)
+            // Knight can spawn on pawns, other pieces need empty cells
+            var is_valid = (piece_positions[hor][vert] == 0) && 
+                           (!has_pawn || is_knight_selected);
+            
+            if (is_valid)
             {
+                draw_set_alpha(0.5);
+                // Use different color for pawn cells (knight only)
+                if (has_pawn && is_knight_selected)
+                {
+                    draw_set_color(c_red); // Red for cells where knight will kill pawn
+                }
+                else
+                {
+                    draw_set_color(c_lime); // Green for empty cells
+                }
+                
                 draw_rectangle(
                     board_offset_x + hor * CELL_SIZE,
                     board_offset_y + vert * CELL_SIZE,
