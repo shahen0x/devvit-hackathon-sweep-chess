@@ -11,13 +11,14 @@ export default function AppSplash() {
     };
 
     return (
-        <div className="flex relative flex-col justify-between items-center h-screen m-0 gap-4 bg-[#F0EAD8]">
+        <div className="relative h-screen bg-background pt-6 flex flex-col justify-between items-center gap-4">
+
             {/* Header */}
-            <header className="mt-4 px-4">
-                <div className="mb-1.5 text-base font-semibold text-center text-black">
+            <header className="px-4 space-y-2 text-center">
+                <div className="text-xs font-bold font-title text-primary">
                     Hey {username}!
                 </div>
-                <h1 className="text-2xl font-bold text-center uppercase leading-7 tracking-tight text-black">
+                <h1 className="text-2xl font-bold font-title leading-7">
                     Can you beat this in fewer moves?
                 </h1>
             </header>
@@ -30,6 +31,7 @@ export default function AppSplash() {
                     alt="Chess board"
                 />
                 <Button
+                    className='mt-6'
                     // size="lg"
                     // className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 active:from-violet-800 active:to-purple-800 text-white font-semibold px-6 py-6 rounded-xl text-lg cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
                     onClick={handleStartClick}
@@ -39,8 +41,8 @@ export default function AppSplash() {
             </div>
 
             {/* Footer */}
-            <footer className="w-full px-4 pb-4 text-black">
-                footer
+            <footer className="w-full px-4 py-2 border-t">
+                <p className='text-sm text-muted-foreground'>Top: 10 moves</p>
             </footer>
         </div>
     );
