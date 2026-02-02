@@ -1,6 +1,15 @@
 // Don't allow clicking if already used
 if (used) exit;
 
+// Don't allow clicking if any piece is moving
+with (oPiece)
+{
+    if (is_moving)
+    {
+        exit;
+    }
+}
+
 // Save current state before clearing
 var was_active = highlight_mode;
 
