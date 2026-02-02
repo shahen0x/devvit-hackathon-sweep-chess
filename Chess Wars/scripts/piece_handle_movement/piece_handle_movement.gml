@@ -61,6 +61,10 @@ function piece_handle_movement()
             board.piece_positions[cell_x][cell_y] = 1; // Mark new position
             is_moving = false;
             
+            // Reset last counted cell for next move
+            last_counted_cell_x = -1;
+            last_counted_cell_y = -1;
+            
             // Clear waypoints
             waypoints = [];
             current_waypoint = 0;

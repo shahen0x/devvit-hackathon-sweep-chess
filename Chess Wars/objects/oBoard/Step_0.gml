@@ -1,3 +1,19 @@
+// Animate cells_travelled_display towards actual value
+if (cells_travelled_display < cells_travelled)
+{
+    cells_counter_timer++;
+    // Increment every 3 frames (slower = higher number)
+    if (cells_counter_timer >= 4)
+    {
+        cells_travelled_display++;
+        cells_counter_timer = 0;
+    }
+}
+else
+{
+    cells_counter_timer = 0;
+}
+
 if (mouse_check_button_pressed(mb_left))
 {
     // Mouse position

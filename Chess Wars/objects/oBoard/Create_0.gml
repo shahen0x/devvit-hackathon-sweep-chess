@@ -2,6 +2,12 @@ board = array_create(BOARD_SIZE);
 board_offset_x = (room_width - BOARD_SIZE * CELL_SIZE) div 2;
 board_offset_y = (room_height - BOARD_SIZE * CELL_SIZE) div 2;
 
+// Stats tracking
+total_moves = 0;        // Increments each time player chooses to move a piece
+cells_travelled = 0;    // Increments for each cell a piece passes through
+cells_travelled_display = 0;  // For animated UI display, counts up to cells_travelled
+cells_counter_timer = 0;      // Timer for slowing down display animation
+
 // Initialize random seed based on today's date
 //var seed = current_year * 10000 + current_month * 100 + current_day;
 //random_set_seed(seed);
@@ -27,79 +33,6 @@ for (var i = 0; i < BOARD_SIZE; i++)
         piece_positions[i][j] = 0;
     }
 }
-
-
-// Spawn queen
-//queen = instance_create_layer(
-//    board_offset_x,
-//    board_offset_y,
-//    "Pieces",
-//    oQueen
-//);
-
-//queen.cell_x = 0;
-//queen.cell_y = 0;
-//queen.board = id;
-//queen.px = board_offset_x;
-//queen.py = board_offset_y;
-//queen.target_cell_x = 0;
-//queen.target_cell_y = 0;
-//piece_positions[0][0] = 1; // Mark queen position
-//show_debug_message("Queen instance: " + string(queen));
-
-//// Spawn rook next to queen at cell (1,0)
-//rook = instance_create_layer(
-//    board_offset_x + 1 * CELL_SIZE,
-//    board_offset_y,
-//    "Pieces",
-//    oRook
-//);
-
-//rook.cell_x = 1;
-//rook.cell_y = 0;
-//rook.board = id;
-//rook.px = board_offset_x + 1 * CELL_SIZE;
-//rook.py = board_offset_y;
-//rook.target_cell_x = 1;
-//rook.target_cell_y = 0;
-//piece_positions[1][0] = 1; // Mark rook position
-//show_debug_message("Rook instance: " + string(rook));
-
-//// Spawn bishop next to rook at cell (2,0)
-//bishop = instance_create_layer(
-//    board_offset_x + 2 * CELL_SIZE,
-//    board_offset_y,
-//    "Pieces",
-//    oBishop
-//);
-
-//bishop.cell_x = 2;
-//bishop.cell_y = 0;
-//bishop.board = id;
-//bishop.px = board_offset_x + 2 * CELL_SIZE;
-//bishop.py = board_offset_y;
-//bishop.target_cell_x = 2;
-//bishop.target_cell_y = 0;
-//piece_positions[2][0] = 1; // Mark bishop position
-//show_debug_message("Bishop instance: " + string(bishop));
-
-//// Spawn knight next to bishop at cell (3,0)
-//knight = instance_create_layer(
-//    board_offset_x + 3 * CELL_SIZE,
-//    board_offset_y,
-//    "Pieces",
-//    oKnight
-//);
-
-//knight.cell_x = 3;
-//knight.cell_y = 0;
-//knight.board = id;
-//knight.px = board_offset_x + 3 * CELL_SIZE;
-//knight.py = board_offset_y;
-//knight.target_cell_x = 3;
-//knight.target_cell_y = 0;
-//piece_positions[3][0] = 1; // Mark knight position
-//show_debug_message("Knight instance: " + string(knight));
 
 // Spawn random pawns
 var num_pawns = 16; // Change this number to spawn more/fewer pawns

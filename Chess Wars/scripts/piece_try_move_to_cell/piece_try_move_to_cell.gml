@@ -19,9 +19,15 @@ function piece_try_move_to_cell()
             target_cell_y = move[1];
             is_moving = true;
             
-            // For pieces that use waypoints (like Knight), calculate the path
+            // Increment move counter
+            board.total_moves++;
+            
+            // Calculate cells travelled based on piece type
             if (use_waypoints)
             {
+                // Knight moves through 3 cells (L-shape)
+                board.cells_travelled += 3;
+                
                 waypoints = [];
                 current_waypoint = 0;
                 
@@ -47,6 +53,14 @@ function piece_try_move_to_cell()
                     array_push(waypoints, [cell_x, cell_y + step_y * 2]);  // Second vertical step
                     array_push(waypoints, [target_cell_x, target_cell_y]); // Final horizontal step
                 }
+            }
+            else
+            {
+                // For straight/diagonal movers (Queen, Rook, Bishop)
+                // Cells travelled = max of horizontal or vertical distance
+                var dx = abs(target_cell_x - cell_x);
+                var dy = abs(target_cell_y - cell_y);
+                board.cells_travelled += max(dx, dy);
             }
             
             // Deselect and clear valid moves

@@ -72,3 +72,10 @@ if (any_highlight_mode)
     draw_set_alpha(1.0);
     draw_set_color(c_white);
 }
+
+// Draw stats UI
+draw_set_color(c_white);
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);
+draw_text(8, 8, "Moves: " + string(total_moves));
+draw_text(8, 28, "Cells Travelled: " + string(cells_travelled_display));
