@@ -19,7 +19,16 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "noEmit": true,
-    "tsBuildInfoFile": "../../dist/types/client/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "../../dist/types/client/tsconfig.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@shared/*": [
+        "../shared/*"
+      ]
+    }
   },
   // https://github.com/Microsoft/TypeScript/issues/25636
   "include": [

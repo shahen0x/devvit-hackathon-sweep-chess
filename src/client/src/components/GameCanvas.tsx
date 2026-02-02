@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { InitResponse } from '../../../shared/types/api';
+import { useRef, useEffect, useState, useCallback } from 'react';
+import { InitResponse } from '@shared/types/api';
 
 declare global {
     interface Window {
@@ -37,7 +37,7 @@ type RunnerManifest = {
     runner?: { version?: string; yyc?: boolean };
 };
 
-const GameCanvas: React.FC = () => {
+const GameCanvas = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const loadingRef = useRef<HTMLDivElement>(null);
     const statusRef = useRef<HTMLDivElement>(null);
