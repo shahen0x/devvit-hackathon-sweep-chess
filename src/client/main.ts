@@ -54,11 +54,11 @@ class GameLoader {
     this.spinnerElement = document.getElementById("spinner") as HTMLElement;
     this.canvasElement = document.getElementById("canvas") as HTMLCanvasElement;
     this.loadingElement = document.getElementById("loading") as HTMLElement;
-    
+
     this.canvasElement.addEventListener("click", () => {
       this.canvasElement.focus();
     });
-    
+
     this.setupModule();
     this.setupResizeObserver();
     this.loadGame();
@@ -83,24 +83,24 @@ class GameLoader {
           window.Module.setStatus.last = { time: Date.now(), text: "" };
         }
         if (text === window.Module.setStatus.last.text) return;
-        
+
         const m = text.match(/([^(]+)\((\d+(?:\.\d+)?)\/(\d+)\)/);
         const now = Date.now();
         if (m && now - window.Module.setStatus.last.time < 30) return;
-        
+
         window.Module.setStatus.last.time = now;
         window.Module.setStatus.last.text = text;
-        
+
         if (m) {
-          this.progressElement.value = parseInt(m[2]) * 100;
-          this.progressElement.max = parseInt(m[3]) * 100;
+          this.progressElement.value = parseInt(m[2] ?? "0") * 100;
+          this.progressElement.max = parseInt(m[3] ?? "100") * 100;
           this.progressElement.hidden = false;
           this.spinnerElement.hidden = false;
         } else {
           this.progressElement.value = 0;
           this.progressElement.max = 100;
           this.progressElement.hidden = true;
-          
+
           if (!text) {
             this.spinnerElement.style.display = "none";
             this.canvasElement.style.display = "block";
@@ -119,9 +119,9 @@ class GameLoader {
         );
       },
     };
-    
+
     window.Module.setStatus("Downloading...");
-    
+
     window.onerror = (event) => {
       window.Module.setStatus("Exception thrown, see JavaScript console");
       this.spinnerElement.style.display = "none";
@@ -163,24 +163,15 @@ class GameLoader {
     }
 
     this.canvasElement.classList.add("active");
-    
+
     const maxWidth = window.innerWidth;
     const maxHeight = window.innerHeight;
-    let newHeight: number, newWidth: number;
 
-    const heightQuotient = this.startingHeight / maxHeight;
-    const widthQuotient = this.startingWidth / maxWidth;
+    // For a square game (1:1 aspect), fit to the smallest dimension
+    const size = Math.min(maxWidth, maxHeight);
 
-    if (heightQuotient > widthQuotient) {
-      newHeight = maxHeight;
-      newWidth = newHeight * this.startingAspect!;
-    } else {
-      newWidth = maxWidth;
-      newHeight = newWidth / this.startingAspect!;
-    }
-
-    this.canvasElement.style.height = "100%" //`${newHeight}px`;
-    this.canvasElement.style.width = "100%" //`${newWidth}px`;
+    this.canvasElement.style.width = `${size}px`;
+    this.canvasElement.style.height = `${size}px`;
   }
 
   private async loadRunnerManifest(): Promise<void> {
@@ -336,28 +327,28 @@ class GameLoader {
     try {
       // First try to get initial data from the server
       await this.fetchInitialData();
-      
+
       // Load manifest data that GameMaker runtime expects
       await this.loadRunnerManifest();
 
       // Setup required global functions before loading GameMaker script
       this.setupGameMakerGlobals();
-      
+
       // Load the GameMaker runner script
       const script = document.createElement('script');
       script.src = '/runner.js';
       script.async = true;
       script.type = 'text/javascript';
-      
+
       script.onload = () => {
         console.log('Game script loaded successfully');
       };
-      
+
       script.onerror = (error) => {
         console.error('Failed to load game script:', error);
         this.statusElement.textContent = 'Failed to load game';
       };
-      
+
       document.head.appendChild(script);
     } catch (error) {
       console.error('Error loading game:', error);
