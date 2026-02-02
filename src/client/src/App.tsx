@@ -1,8 +1,5 @@
-import React from 'react';
 import GameCanvas from './components/GameCanvas';
 
-const App: React.FC = () => {
+export default function App() {
     return <GameCanvas />;
-};
-
-export default App;
+}

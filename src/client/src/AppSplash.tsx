@@ -2,7 +2,7 @@ import React from 'react';
 import { requestExpandedMode, context } from '@devvit/web/client';
 import './index.css';
 
-const SplashApp: React.FC = () => {
+export default function AppSplash() {
     const username = context.username ?? 'Player';
 
     const handleStartClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,7 +32,7 @@ const SplashApp: React.FC = () => {
                     className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 active:from-violet-800 active:to-purple-800 text-white font-semibold px-6 py-3 rounded-xl text-lg cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
                     onClick={handleStartClick}
                 >
-                    Make Your Move
+                    Make Your Moves
                 </button>
             </div>
 
@@ -42,6 +42,4 @@ const SplashApp: React.FC = () => {
             </footer>
         </div>
     );
-};
-
-export default SplashApp;
+}

@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import SplashApp from './SplashApp';
+import AppSplash from './AppSplash';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <SplashApp />
+        <AppSplash />
     </React.StrictMode>
 );
