@@ -1,17 +1,21 @@
+:root {
+	--main-bg-color: #F0EAD8;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 	font-family: monospace;
 	color: #000000;
-	background-color: #F0EAD8;
+	background-color: var(--main-bg-color);
 }
 
 .app {
 	display: flex;
 	position: relative;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 	height: 100vh;
 	margin: 0;
@@ -21,6 +25,12 @@
 /***********************
  * HEADER
  **********************/
+.header {
+	margin-top: 16px;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
 .greetUser {
 	margin-bottom: 6px;
 	font-size: medium;
@@ -40,12 +50,13 @@
 /***********************
  * CONTENT
  **********************/
-
 .content {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 8px;
+	padding-left: 16px;
+	padding-right: 16px;
 }
 
 .board {
@@ -58,6 +69,12 @@
 /***********************
  * FOOTER
  **********************/
+.footer {
+	width: 100%;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
 .start-button {
 	background-color: #d93900;
 	color: #ffffff;
