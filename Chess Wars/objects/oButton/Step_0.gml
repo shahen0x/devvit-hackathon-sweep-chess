@@ -1,3 +1,6 @@
+// Block interactions if game is over
+if (oBoard.game_over) exit;
+
 // Handle cell selection when highlight mode is active
 if (highlight_mode && mouse_check_button_pressed(mb_left))
 {
@@ -18,18 +21,32 @@ if (highlight_mode && mouse_check_button_pressed(mb_left))
         var cell_y = local_y div CELL_SIZE;
         // Check if there's a pawn at this cell
         var has_pawn = false;
+        var pawn_at_cell = noone;
         with (oPawn)
         {
             if (self.cell_x == cell_x && self.cell_y == cell_y)
             {
                 has_pawn = true;
+                pawn_at_cell = id;
                 break;
             }
         }
         
-        // Check if cell is free (no piece and no pawn)
-        if (oBoard.piece_positions[cell_x][cell_y] == 0 && !has_pawn)
+        // Knight can spawn on pawns, other pieces cannot
+        var is_knight = (piece_type == oKnight);
+        var can_spawn = (oBoard.piece_positions[cell_x][cell_y] == 0) && 
+                        (!has_pawn || is_knight);
+        
+        // Check if cell is valid for spawning
+        if (can_spawn)
         {
+            // If knight spawns on a pawn, kill it
+            if (is_knight && has_pawn && pawn_at_cell != noone)
+            {
+                show_debug_message("Knight spawned on pawn - pawn eliminated!");
+                instance_destroy(pawn_at_cell);
+            }
+            
             // Spawn piece at the selected cell
             var new_piece = instance_create_layer(
                 oBoard.board_offset_x + cell_x * CELL_SIZE,
@@ -53,6 +70,9 @@ if (highlight_mode && mouse_check_button_pressed(mb_left))
             
             // Turn off highlight mode after spawning
             highlight_mode = false;
+            
+            // Mark button as used
+            used = true;
         }
     }
 }

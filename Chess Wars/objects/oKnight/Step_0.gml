@@ -1,8 +1,22 @@
 // Handle smooth movement
 piece_handle_movement();
 
+// Block interactions if game is over
+if (oBoard.game_over) exit;
+
+// Check if any piece is moving (disable all interactions during movement)
+var any_piece_moving = false;
+with (oPiece)
+{
+    if (is_moving)
+    {
+        any_piece_moving = true;
+        break;
+    }
+}
+
 // Only allow clicks when not moving
-if (!is_moving && mouse_check_button_pressed(mb_left))
+if (!any_piece_moving && mouse_check_button_pressed(mb_left))
 {
     // Check if clicking on this piece - clear all interactions first
     if (piece_is_clicked())

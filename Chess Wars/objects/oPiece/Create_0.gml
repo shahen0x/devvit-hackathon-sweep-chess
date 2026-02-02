@@ -7,9 +7,18 @@ cell_y = 0;
 px = 0;
 py = 0;
 
+// Track last cell for counting cells travelled
+last_counted_cell_x = -1;
+last_counted_cell_y = -1;
+
 // Target cell for movement
 target_cell_x = 0;
 target_cell_y = 0;
+
+// Waypoint system for multi-step movement (used by Knight)
+waypoints = []; // Array of [cell_x, cell_y] waypoints
+current_waypoint = 0;
+use_waypoints = false; // Whether this piece moves through waypoints
 
 // Movement state
 is_moving = false;
