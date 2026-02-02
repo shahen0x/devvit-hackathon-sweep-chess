@@ -2,30 +2,16 @@
 <html lang="en">
 
 <head>
-	<link rel="stylesheet" type="text/css" href="splash/splash.css" />
 	<meta charset="UTF-8" />
 	<meta name="viewport"
 		content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height, user-scalable=0" />
-	<title>devvit</title>
+	<title>Chess Wars</title>
+	<link rel="stylesheet" type="text/css" href="styles/splash.css" />
 </head>
 
-<body class="app">
-
-	<header class="header">
-		<div class="greetUser" id="greetUser"></div>
-		<h1 class="title">Can you beat this in fewer moves?</h1>
-	</header>
-
-	<div class="content">
-		<img src="/images/board.png" class="board" />
-		<button class="start-button" id="start-button">Make Your Move</button>
-	</div>
-
-	<footer class="footer">
-		footer
-	</footer>
-
-	<script type="module" src="splash/splash.ts" defer></script>
+<body>
+	<div id="root"></div>
+	<script type="module" src="src/splash-main.tsx"></script>
 </body>
 
 </html>
