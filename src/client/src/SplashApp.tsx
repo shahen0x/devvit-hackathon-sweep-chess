@@ -19,7 +19,7 @@ const SplashApp: React.FC = () => {
             <div className="content">
                 <img src="/images/board.png" className="board" alt="Chess board" />
                 <button className="start-button" onClick={handleStartClick}>
-                    Make Your Moves
+                    Make Your Move
                 </button>
             </div>
 
