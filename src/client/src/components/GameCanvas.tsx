@@ -373,9 +373,6 @@ const GameCanvas = () => {
                 ref={canvasRef}
                 className={`
                     border-0 bg-black relative my-auto
-                    transition-opacity duration-[5000ms] ease-in
-                    [image-rendering:pixelated]
-                    ${canvasActive ? 'opacity-100 animate-[fadeIn_2s]' : 'opacity-0'}
                 `}
                 id="canvas"
                 onContextMenu={(e) => e.preventDefault()}
