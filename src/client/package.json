@@ -1,0 +1,8 @@
+{
+    "name": "chess-war-client",
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "@radix-ui/react-slot": "^1.2.4"
+    }
+}
