@@ -41,6 +41,7 @@ function piece_handle_movement()
             if (pawn_instance != noone)
             {
                 show_debug_message(piece_name + " captured pawn at waypoint!");
+                audio_play_sound(sndKill, 1, false);
                 instance_destroy(pawn_instance);
             }
         }
@@ -78,6 +79,7 @@ function piece_handle_movement()
                 if (pawn_instance != noone)
                 {
                     show_debug_message(piece_name + " captured pawn!");
+                    audio_play_sound(sndKill, 1, false);
                     instance_destroy(pawn_instance);
                 }
             }
@@ -97,6 +99,7 @@ function piece_handle_movement()
             if (pawn_instance != noone)
             {
                 show_debug_message(piece_name + " captured pawn!");
+                audio_play_sound(sndKill, 1, false);
                 instance_destroy(pawn_instance);
             }
         }

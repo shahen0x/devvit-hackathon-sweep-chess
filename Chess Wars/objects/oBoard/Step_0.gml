@@ -37,6 +37,9 @@ if (!any_piece_moving)
         show_debug_message("Total Moves: " + string(total_moves));
         show_debug_message("Cells Travelled: " + string(cells_travelled));
         
+        // Play win sound
+        audio_play_sound(sndWin, 1, false);
+        
         game_over = true;
     }
 }
