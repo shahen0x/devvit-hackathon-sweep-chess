@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* Base styles and CSS custom properties */
+:root {
+    --main-bg-color: #F0EAD8;
+    --game-bg-color: brown;
+}
+
+/* Rotation animation for spinner */
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Fade in animation for game canvas */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

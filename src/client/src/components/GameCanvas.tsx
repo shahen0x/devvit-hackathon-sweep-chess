@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { InitResponse } from '../../../shared/types/api';
-import '../../style.css';
 
 declare global {
     interface Window {
@@ -372,7 +371,12 @@ const GameCanvas: React.FC = () => {
         <>
             <canvas
                 ref={canvasRef}
-                className={`game-canvas${canvasActive ? ' active' : ''}`}
+                className={`
+                    border-0 bg-black relative my-auto
+                    transition-opacity duration-[5000ms] ease-in
+                    [image-rendering:pixelated]
+                    ${canvasActive ? 'opacity-100 animate-[fadeIn_2s]' : 'opacity-0'}
+                `}
                 id="canvas"
                 onContextMenu={(e) => e.preventDefault()}
                 onClick={handleCanvasClick}
@@ -381,12 +385,20 @@ const GameCanvas: React.FC = () => {
             />
             <div
                 ref={loadingRef}
-                className="loading"
+                className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none"
                 id="loading"
                 style={{ display: isLoading ? 'flex' : 'none' }}
             >
-                <div ref={spinnerRef} className="spinner" id="spinner" />
-                <div ref={statusRef} className="status" id="status">
+                <div
+                    ref={spinnerRef}
+                    className="h-[30px] w-[30px] animate-[rotation_0.8s_linear_infinite] border-[5px] border-[#bdff00] border-t-[#719900] rounded-full m-2.5 p-2.5"
+                    id="spinner"
+                />
+                <div
+                    ref={statusRef}
+                    className="inline-block align-top font-bold text-white m-2.5 p-2.5"
+                    id="status"
+                >
                     {statusText}
                 </div>
                 <progress
@@ -395,6 +407,9 @@ const GameCanvas: React.FC = () => {
                     max={progressMax}
                     id="progress"
                     hidden={progressHidden}
+                    className="w-[250px] h-2.5 appearance-none p-1.25 m-2.5
+                        [&::-webkit-progress-bar]:bg-[#8492a6] [&::-webkit-progress-bar]:h-2.5 [&::-webkit-progress-bar]:rounded-2xl
+                        [&::-webkit-progress-value]:bg-gradient-to-r [&::-webkit-progress-value]:from-[#719900] [&::-webkit-progress-value]:to-[#bdff00] [&::-webkit-progress-value]:h-2.5 [&::-webkit-progress-value]:rounded-2xl"
                 />
             </div>
         </>
