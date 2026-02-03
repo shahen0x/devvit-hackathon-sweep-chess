@@ -26,6 +26,8 @@ export default function AppSplash() {
                     console.log('Board data received:', data);
                     console.log('Board:', data.board);
                     console.log('Game ID:', data.gameId);
+                    console.log('Display Name', data.userDisplayName)
+                    console.log('Avatar', data.avatar)
                 } else {
                     console.error("Invalid response from /api/board-data", data);
                 }
@@ -74,6 +76,31 @@ export default function AppSplash() {
         return position;
     }, [context.postData]);
 
+
+
+
+    async function handleSubmitScore() {
+            try {
+                const response = await fetch("/api/submit-score", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        totalMoves: 10,
+                        cellsTravelled: 20
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = (await response.json());
+                console.log("👌👌", data)
+            } catch (error) {
+                console.error("Error fetching board data:", error);
+            }
+        }
+
     return (
         <div className="relative h-screen bg-background pt-6 flex flex-col justify-between items-center gap-4">
 
@@ -114,7 +141,8 @@ export default function AppSplash() {
                     className='mt-6'
                     // size="lg"
                     // className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 active:from-violet-800 active:to-purple-800 text-white font-semibold px-6 py-6 rounded-xl text-lg cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
-                    onClick={handleStartClick}
+                    // onClick={handleStartClick}
+                    onClick={handleSubmitScore}
                 >
                     Make Your Move
                 </Button>
