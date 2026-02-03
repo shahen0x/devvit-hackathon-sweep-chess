@@ -90,3 +90,9 @@ for (var i = 0; i < num_pawns; i++)
 
 ds_map_destroy(occupied_cells);
 
+// Fetch board data from server
+api_get_board_data(function(_data) {
+	show_debug_message("Board data received from server:");
+	show_debug_message(_data);
+	show_debug_message(json_stringify(_data));	
+});
