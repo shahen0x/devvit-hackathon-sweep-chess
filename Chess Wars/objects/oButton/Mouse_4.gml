@@ -1,6 +1,9 @@
 // Don't allow clicking if game is over
 if (oBoard.game_over) exit;
 
+// Don't allow clicking if board data hasn't loaded yet
+if (!oBoard.board_data_loaded) exit;
+
 // Don't allow clicking if already used
 if (used) exit;
 
