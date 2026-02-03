@@ -22,23 +22,43 @@ if (game_over)
     draw_text(center_x, center_y, "Final Moves: " + string(total_moves));
     draw_text(center_x, center_y + 20, "Cells Travelled: " + string(cells_travelled));
     
+    // Display score submission status
+    if (!score_submitted) {
+        draw_set_color(c_yellow);
+        draw_text(center_x, center_y + 40, "Submitting score...");
+        draw_set_color(c_white);
+    } else if (score_submission_status == "success") {
+        draw_set_color(c_lime);
+        draw_text(center_x, center_y + 40, "Score submitted successfully!");
+        draw_set_color(c_white);
+    } else if (score_submission_status == "failed") {
+        draw_set_color(c_red);
+        draw_text(center_x, center_y + 40, "Failed to submit score");
+        draw_set_color(c_white);
+    }
+    
     // Restart button
     var mx = mouse_x;
     var my = mouse_y;
-    var hovering = point_in_rectangle(mx, my, restart_button_x, restart_button_y,
+    var hovering = restart_button_enabled && point_in_rectangle(mx, my, restart_button_x, restart_button_y,
                                       restart_button_x + restart_button_w, restart_button_y + restart_button_h);
     
-    // Button background
-    draw_set_color(hovering ? c_black : c_dkgray);
+    // Button background - greyed out if not enabled
+    if (!restart_button_enabled) {
+        draw_set_color(c_gray);
+    } else {
+        draw_set_color(hovering ? c_black : c_dkgray);
+    }
     draw_rectangle(restart_button_x, restart_button_y, 
                   restart_button_x + restart_button_w, restart_button_y + restart_button_h, false);
     
     // Button border
-    draw_set_color(c_white);
+    draw_set_color(restart_button_enabled ? c_white : c_dkgray);
     draw_rectangle(restart_button_x, restart_button_y, 
                   restart_button_x + restart_button_w, restart_button_y + restart_button_h, true);
     
     // Button text
+    draw_set_color(restart_button_enabled ? c_white : c_dkgray);
     draw_text(center_x, restart_button_y + restart_button_h / 2, "RESTART");
     
     // Reset alignment

@@ -34,3 +34,35 @@ function api_get_board_data(_callback) {
 	
 	return _req;
 }
+
+/// @desc This function submits the player's score to the server.
+/// @param {Real} _totalMoves The total number of moves made by the player
+/// @param {Real} _cellsTravelled The total number of cells travelled by the player
+/// @param {Function} _callback The callback that you want to be executed upon task completion.
+function api_submit_score(_totalMoves, _cellsTravelled, _callback) {
+	
+	// Build request url
+	var _url = reddit_get_base_url() + "/api/submit-score";
+	
+	// Build request headers
+	var _headers = ds_map_create();
+	ds_map_add(_headers, "Authorization", $"Bearer {reddit_get_token()}");
+	ds_map_add(_headers, "Content-Type", "application/json");
+	
+	// Build request body
+	var _body = json_stringify({
+		totalMoves: _totalMoves,
+		cellsTravelled: _cellsTravelled
+	});
+	
+	// Make request
+	var _req = http_request(_url, "POST", _headers, _body);
+	
+	// Free memory
+	ds_map_destroy(_headers);
+	
+	// Register request callback
+	if (is_callable(_callback)) api_register_request(_req, _callback);
+	
+	return _req;
+}
