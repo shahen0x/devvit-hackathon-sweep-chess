@@ -25,12 +25,13 @@ with (oPiece)
     }
 }
 
-if (!any_piece_moving)
+if (!any_piece_moving && board_data_loaded)
 {
     // Count remaining pawns
     var pawn_count = instance_number(oPawn);
     
-    if (pawn_count == 0 && !game_over)
+    // Only trigger game over if player has made at least one move
+    if (pawn_count == 0 && !game_over && total_moves > 0)
     {
         // Game Over!
         show_debug_message("GAME OVER - All pawns eliminated!");

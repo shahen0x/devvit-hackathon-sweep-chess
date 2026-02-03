@@ -10,6 +10,7 @@ cells_counter_timer = 0;      // Timer for slowing down display animation
 
 // Game over state
 game_over = false;
+board_data_loaded = false;  // Flag to track when board data has been received
 restart_button_x = room_width / 2 - 60;
 restart_button_y = room_height / 2 + 60;
 restart_button_w = 120;
@@ -41,7 +42,8 @@ for (var i = 0; i < BOARD_SIZE; i++)
     }
 }
 
-// Spawn random pawns
+// Spawn random pawns (COMMENTED OUT - now using server data)
+/*
 var num_pawns = 16; // Change this number to spawn more/fewer pawns
 var occupied_cells = ds_map_create(); // Track occupied cells
 occupied_cells[? "0,0"] = true; // Queen's position
@@ -89,10 +91,58 @@ for (var i = 0; i < num_pawns; i++)
 }
 
 ds_map_destroy(occupied_cells);
+*/
 
 // Fetch board data from server
-api_get_board_data(function(_data) {
-	show_debug_message("Board data received from server:");
-	show_debug_message(_data);
-	show_debug_message(json_stringify(_data));	
+api_get_board_data(function(_http_status, _ok, _result, _payload) {
+	show_debug_message("=== Board data received from server ===");
+	show_debug_message("HTTP Status: " + string(_http_status ?? "undefined"));
+	show_debug_message("Success: " + string(_ok ?? "undefined"));
+	show_debug_message("Result: " + string(_result ?? "undefined"));
+	
+	// Try to parse the result as JSON
+	if (_ok && !is_undefined(_result) && _result != "") {
+		try {
+			var _data = json_parse(_result);
+			show_debug_message("Parsed data: " + json_stringify(_data));
+			
+			// Spawn pawns from server board data
+			// board[x][y] where board[x] is the column array, y is the row index
+			// board[x][y] === 1 means there's a pawn at that position
+			if (variable_struct_exists(_data, "board") && is_array(_data.board)) {
+				var _board = _data.board;
+				var _board_ref = oBoard.id; // Store reference to oBoard
+				
+				for (var _x = 0; _x < array_length(_board); _x++) {
+					if (is_array(_board[_x])) {
+						for (var _y = 0; _y < array_length(_board[_x]); _y++) {
+							if (_board[_x][_y] == 1) {
+								// Spawn a pawn at this position
+							// Invert y: board y=0 should be at bottom (screen y=7), y=7 at top (screen y=0)
+							var _screen_y = 7 - _y;
+							var new_pawn = instance_create_layer(
+								_board_ref.board_offset_x + _x * CELL_SIZE,
+								_board_ref.board_offset_y + _screen_y * CELL_SIZE,
+								"Pieces",
+								oPawn
+							);
+							
+							new_pawn.cell_x = _x;
+							new_pawn.cell_y = _screen_y;
+							new_pawn.board = _board_ref;
+							new_pawn.px = _board_ref.board_offset_x + _x * CELL_SIZE;
+							new_pawn.py = _board_ref.board_offset_y + _screen_y * CELL_SIZE;
+							show_debug_message("Pawn spawned from server at: " + string(_x) + "," + string(_screen_y));
+							}
+						}
+					}
+				}
+			}
+			// Mark board data as loaded after processing
+			_board_ref.board_data_loaded = true;
+			show_debug_message("Board data loaded successfully!");
+		} catch(_ex) {
+			show_debug_message("Failed to parse JSON: " + string(_ex));
+		}
+	}
 });

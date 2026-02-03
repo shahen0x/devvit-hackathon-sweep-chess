@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"reddit_server_api",
+  "%Name":"reddit_demo_server_api",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"reddit_server_api",
+  "name":"reddit_demo_server_api",
   "parent":{
     "name":"Scripts",
     "path":"folders/Scripts.yy",

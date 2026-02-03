@@ -3,7 +3,7 @@ import '@/index.css';
 import React, { useEffect, useMemo } from 'react';
 import { requestExpandedMode, context } from '@devvit/web/client';
 import { Button } from '@/components/ui/button';
-import {Chessboard} from 'react-chessboard';
+import { Chessboard } from 'react-chessboard';
 
 
 export default function AppSplash() {
@@ -40,8 +40,8 @@ export default function AppSplash() {
     // Custom piece components
     const customPieces = useMemo(() => ({
         bP: () => (
-            <img 
-                src="/images/piece-pawn.svg" 
+            <img
+                src="/images/piece-pawn.svg"
                 alt="pawn"
                 className='w-full h-full p-0.5'
             />
@@ -52,10 +52,10 @@ export default function AppSplash() {
     const boardPosition = useMemo(() => {
         const board = context.postData?.board as number[][] | undefined;
         if (!board) return {};
-        
+
         const position: Record<string, { pieceType: string }> = {};
         const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-        
+
         // Place pawns based on board data
         // board[x][y] where board[x] is the column array, y is the row index
         // board[0] = column 'a', board[1] = column 'b', etc.
@@ -69,7 +69,7 @@ export default function AppSplash() {
                 }
             }
         }
-        
+
         // console.log('Board position:', position);
         return position;
     }, [context.postData]);
@@ -96,17 +96,17 @@ export default function AppSplash() {
                 /> */}
 
                 <div style={{ width: '250px' }}>
-                    <Chessboard options={{ 
-                            position: boardPosition, 
-                            allowDragging: false,
-                            boardStyle: {
-                                border: '1px solid #BFA280'
-                            },
-                            lightSquareStyle: { backgroundColor: '#EDD6BB' },
-                            darkSquareStyle: { backgroundColor: '#D9BE9E' },
-                            pieces: customPieces,
-                            showNotation: false
-                        }}
+                    <Chessboard options={{
+                        position: boardPosition,
+                        allowDragging: false,
+                        boardStyle: {
+                            border: '1px solid #BFA280'
+                        },
+                        lightSquareStyle: { backgroundColor: '#EDD6BB' },
+                        darkSquareStyle: { backgroundColor: '#D9BE9E' },
+                        pieces: customPieces,
+                        showNotation: false
+                    }}
                     />
                 </div>
 
