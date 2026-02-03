@@ -17,18 +17,20 @@ export default function AppSplash() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch("/api/init");
+                const response = await fetch("/api/board-data");
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = (await response.json());
-                if (data.type === "init") {
-                    console.log(data);
+                if (data.status === "success") {
+                    console.log('Board data received:', data);
+                    console.log('Board:', data.board);
+                    console.log('Game ID:', data.gameId);
                 } else {
-                    console.error("Invalid response type from /api/init", data);
+                    console.error("Invalid response from /api/board-data", data);
                 }
             } catch (error) {
-                console.error("Error fetching initial data:", error);
+                console.error("Error fetching board data:", error);
             }
         }
 
