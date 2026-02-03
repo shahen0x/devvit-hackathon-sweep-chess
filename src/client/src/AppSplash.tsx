@@ -1,14 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { requestExpandedMode, context } from '@devvit/web/client';
+import { requestExpandedMode, context, showToast } from '@devvit/web/client';
 import '@/index.css';
 
 export default function AppSplash() {
     const username = context.username ?? 'Player';
+    console.log(context.postData)
+    showToast('Hello from Devvit Web!');
 
     const handleStartClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         requestExpandedMode(e.nativeEvent, 'game');
     };
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await fetch("/api/init");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = (await response.json());
+                if (data.type === "init") {
+                    console.log(data);
+                } else {
+                    console.error("Invalid response type from /api/init", data);
+                }
+            } catch (error) {
+                console.error("Error fetching initial data:", error);
+            }
+        }
+
+        fetchData();
+    }, []);
 
     return (
         <div className="relative h-screen bg-background pt-6 flex flex-col justify-between items-center gap-4">
