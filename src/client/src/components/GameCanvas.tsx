@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { InitResponse } from '@shared/types/api';
+import { context } from '@devvit/web/client';
 
 declare global {
     interface Window {
@@ -25,6 +26,8 @@ declare global {
         g_pAddAsyncMethod?: any;
         g_pJSExceptionHandler?: any;
         g_pWadLoadCallback?: any;
+        // Custom function to send board data to GameMaker
+        sendBoardDataToGM?: (boardData: number[][]) => void;
     }
 }
 
@@ -57,6 +60,9 @@ const GameCanvas = () => {
         aspect?: number;
     }>({});
 
+    // Get board data from context
+    const boardData = (context.postData?.board as number[][] | undefined) || [];
+
     const ensureAspectRatio = useCallback(() => {
         const canvas = canvasRef.current;
         const { width, height, aspect } = startingDimensions.current;
@@ -71,11 +77,41 @@ const GameCanvas = () => {
     }, []);
 
     const setupGameMakerGlobals = useCallback(() => {
+        // Function to send board data to GameMaker
+        window.sendBoardDataToGM = (boardData: number[][]) => {
+            console.log('Sending board data to GameMaker:', boardData);
+            
+            // Convert 2D array to JSON string
+            const boardJSON = JSON.stringify(boardData);
+            
+            // If GameMaker's async method is available, call it
+            if (window.g_pAddAsyncMethod && window.g_pAddAsyncMethod !== -1) {
+                try {
+                    // Call GameMaker async method with board data
+                    window.g_pAddAsyncMethod('board_data_received', boardJSON);
+                    console.log('Board data sent to GameMaker successfully');
+                } catch (e) {
+                    console.error('Error calling GameMaker async method:', e);
+                }
+            } else {
+                console.warn('GameMaker async method not ready yet');
+            }
+        };
+
         // GameMaker async method support
         window.g_pAddAsyncMethod = -1;
         window.setAddAsyncMethod = (asyncMethod: any) => {
             window.g_pAddAsyncMethod = asyncMethod;
             console.log("setAddAsyncMethod called with:", asyncMethod);
+            
+            // Send board data immediately after async method is registered
+            if (boardData.length > 0) {
+                setTimeout(() => {
+                    if (window.sendBoardDataToGM) {
+                        window.sendBoardDataToGM(boardData);
+                    }
+                }, 100);
+            }
         };
 
         // Exception handling
@@ -361,7 +397,7 @@ const GameCanvas = () => {
         return () => {
             resizeObserver.disconnect();
         };
-    }, [ensureAspectRatio, setupModule, loadGame]);
+    }, [ensureAspectRatio, setupModule, loadGame, boardData]);
 
     const handleCanvasClick = () => {
         canvasRef.current?.focus();
