@@ -19,6 +19,9 @@ function piece_try_move_to_cell()
             target_cell_y = move[1];
             is_moving = true;
             
+            // Play move sound
+            audio_play_sound(sndMove, 1, false);
+            
             // Increment move counter
             board.total_moves++;
             
