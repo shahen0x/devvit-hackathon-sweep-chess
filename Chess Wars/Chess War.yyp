@@ -36,6 +36,7 @@
     {"id":{"name":"oQueen","path":"objects/oQueen/oQueen.yy",},},
     {"id":{"name":"oRook","path":"objects/oRook/oRook.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"id":{"name":"board_cache_manager","path":"scripts/board_cache_manager/board_cache_manager.yy",},},
     {"id":{"name":"clear_all_interactions","path":"scripts/clear_all_interactions/clear_all_interactions.yy",},},
     {"id":{"name":"piece_handle_movement","path":"scripts/piece_handle_movement/piece_handle_movement.yy",},},
     {"id":{"name":"piece_is_clicked","path":"scripts/piece_is_clicked/piece_is_clicked.yy",},},

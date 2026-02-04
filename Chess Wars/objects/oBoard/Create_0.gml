@@ -75,68 +75,56 @@ for (var i = 0; i < BOARD_SIZE; i++)
 }
 
 
+// Initialize global board cache if it doesn't exist
+if (!variable_global_exists("cached_board_data")) {
+	global.cached_board_data = undefined;
+	global.board_cache_valid = false;
+	global.board_cache_timestamp = undefined;
+}
+
 // Check if this is a Reddit build or test build
 if (is_reddit_build()) {
-	// REDDIT BUILD: Fetch board data from server
-	debug_log("Reddit build detected - Fetching board data...");
-	debug_log("URL: " + reddit_get_base_url());
-	debug_log("Token: " + reddit_get_token());
+	// REDDIT BUILD: Use cached data if available, otherwise fetch from server
+	if (is_board_cache_valid()) {
+		debug_log("Reddit build - Using cached board data...");
+		spawn_pawns_from_data(get_cached_board_data());
+		board_data_loaded = true;
+		debug_log("Board loaded from cache!");
+	} else {
+		debug_log("Reddit build - Fetching fresh board data...");
+		debug_log("URL: " + reddit_get_base_url());
+		debug_log("Token: " + reddit_get_token());
 
-	api_get_board_data(function(_http_status, _ok, _result, _payload) {
-		debug_log("=== Response ===");
-		debug_log("HTTP: " + string(_http_status ?? "undef"));
-		debug_log("OK: " + string(_ok ?? "undef"));
-		debug_log("Len: " + string(string_length(_result ?? "")));
-		
-		// Try to parse the result as JSON
-		if (_ok && !is_undefined(_result) && _result != "") {
-			try {
-				var _data = json_parse(_result);
-				debug_log("JSON parsed OK");
-				
-				// Spawn pawns from server board data
-				// board[x][y] where board[x] is the column array, y is the row index
-				// board[x][y] === 1 means there's a pawn at that position
-				if (variable_struct_exists(_data, "board") && is_array(_data.board)) {
-					var _board = _data.board;
-					var _board_ref = oBoard.id; // Store reference to oBoard
+		api_get_board_data(function(_http_status, _ok, _result, _payload) {
+			debug_log("=== Response ===");
+			debug_log("HTTP: " + string(_http_status ?? "undef"));
+			debug_log("OK: " + string(_ok ?? "undef"));
+			debug_log("Len: " + string(string_length(_result ?? "")));
+			
+			// Try to parse the result as JSON
+			if (_ok && !is_undefined(_result) && _result != "") {
+				try {
+					var _data = json_parse(_result);
+					debug_log("JSON parsed OK");
 					
-					for (var _x = 0; _x < array_length(_board); _x++) {
-						if (is_array(_board[_x])) {
-							for (var _y = 0; _y < array_length(_board[_x]); _y++) {
-								if (_board[_x][_y] == 1) {
-									// Spawn a pawn at this position
-								// Invert y: board y=0 should be at bottom (screen y=7), y=7 at top (screen y=0)
-								var _screen_y = 7 - _y;
-								var new_pawn = instance_create_layer(
-									_board_ref.board_offset_x + _x * CELL_SIZE,
-									_board_ref.board_offset_y + _screen_y * CELL_SIZE,
-									"Pieces",
-									oPawn
-								);
-								
-								new_pawn.cell_x = _x;
-								new_pawn.cell_y = _screen_y;
-								new_pawn.board = _board_ref;
-								new_pawn.px = _board_ref.board_offset_x + _x * CELL_SIZE;
-								new_pawn.py = _board_ref.board_offset_y + _screen_y * CELL_SIZE;
-								//debug_log("Pawn at: " + string(_x) + "," + string(_screen_y));
-								}
-							}
-						}
-					}
+					// Cache the board data for future restarts
+					cache_board_data(_data);
+					
+					// Spawn pawns from server board data
+					spawn_pawns_from_data(_data);
+					
+					// Mark board data as loaded after processing
+					oBoard.board_data_loaded = true;
+					debug_log("Board loaded!");
+				} catch(_ex) {
+					debug_log("JSON Error: " + string(_ex));
 				}
-				// Mark board data as loaded after processing
-				_board_ref.board_data_loaded = true;
-				debug_log("Board loaded!");
-			} catch(_ex) {
-				debug_log("JSON Error: " + string(_ex));
+			} else {
+				debug_log("Fetch failed or empty");
+				debug_log("_ok=" + string(_ok));
 			}
-		} else {
-			debug_log("Fetch failed or empty");
-			debug_log("_ok=" + string(_ok));
-		}
-	});
+		});
+	}
 } else {
 	// TEST BUILD: Spawn random pawns locally
 	debug_log("Test build detected - Spawning random pawns...");
@@ -192,4 +180,41 @@ if (is_reddit_build()) {
 	// Mark board as loaded immediately for test build
 	board_data_loaded = true;
 	debug_log("Test board loaded!");
+}
+
+/// @func spawn_pawns_from_data(data)
+/// @param {Struct} data The board data containing pawn positions
+function spawn_pawns_from_data(_data) {
+	// Spawn pawns from board data
+	// board[x][y] where board[x] is the column array, y is the row index
+	// board[x][y] === 1 means there's a pawn at that position
+	if (variable_struct_exists(_data, "board") && is_array(_data.board)) {
+		var _board = _data.board;
+		var _board_ref = oBoard.id; // Store reference to oBoard
+		
+		for (var _x = 0; _x < array_length(_board); _x++) {
+			if (is_array(_board[_x])) {
+				for (var _y = 0; _y < array_length(_board[_x]); _y++) {
+					if (_board[_x][_y] == 1) {
+						// Spawn a pawn at this position
+						// Invert y: board y=0 should be at bottom (screen y=7), y=7 at top (screen y=0)
+						var _screen_y = 7 - _y;
+						var new_pawn = instance_create_layer(
+							_board_ref.board_offset_x + _x * CELL_SIZE,
+							_board_ref.board_offset_y + _screen_y * CELL_SIZE,
+							"Pieces",
+							oPawn
+						);
+						
+						new_pawn.cell_x = _x;
+						new_pawn.cell_y = _screen_y;
+						new_pawn.board = _board_ref;
+						new_pawn.px = _board_ref.board_offset_x + _x * CELL_SIZE;
+						new_pawn.py = _board_ref.board_offset_y + _screen_y * CELL_SIZE;
+						//debug_log("Pawn at: " + string(_x) + "," + string(_screen_y));
+					}
+				}
+			}
+		}
+	}
 }

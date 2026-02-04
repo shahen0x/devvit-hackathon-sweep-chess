@@ -80,3 +80,37 @@ if (game_over)
 
 //draw_set_alpha(1.0);
 //draw_set_color(c_white);
+
+// Draw cache status and controls (only for Reddit builds)
+//if (is_reddit_build() && !game_over) {
+//    draw_set_halign(fa_left);
+//    draw_set_valign(fa_top);
+//    draw_set_alpha(0.8);
+    
+//    var status_text = "";
+//    var cache_age = get_cache_age_minutes();
+    
+//    if (is_board_cache_valid() && cache_age >= 0) {
+//        draw_set_color(c_lime);
+//        var age_text = "";
+//        if (cache_age < 1) {
+//            age_text = "< 1 min";
+//        } else {
+//            age_text = string(floor(cache_age)) + " min";
+//        }
+//        status_text = "Board: Cached (" + age_text + " old)";
+//    } else {
+//        draw_set_color(c_yellow);
+//        status_text = "Board: Fresh";
+//    }
+    
+//    draw_text(8, 8, status_text);
+    
+//    // Show F5 instruction
+//    draw_set_color(c_white);
+//    draw_text(8, 28, "Press F5 for fresh data");
+    
+//    draw_set_alpha(1.0);
+//    draw_set_halign(fa_left);
+//    draw_set_valign(fa_top);
+//}
