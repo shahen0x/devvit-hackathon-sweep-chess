@@ -54,12 +54,46 @@ function reddit_get_token() {
 	if (!is_undefined(_token)) return _token;
 	
 	_token = "noone";
+	
+	// Try getting token from parameter_string (desktop browser)
 	for (var _i = 0; _i < parameter_count(); ++_i) {
 		var _param = parameter_string(_i);
 		if (string_starts_with(_param, "token=")) {
 			_token = string_delete(_param, 1, 6);
+			show_debug_message("Token found via parameter_string: " + _token);
+			return _token;
 		}
 	}
 	
+	// Try getting token from os_get_info (mobile/alternative)
+	var _info = os_get_info();
+	
+	// Check for token in URL hash or search params
+	var _href = ds_map_find_value(_info, "window.location.href");
+	if (!is_undefined(_href)) {
+		show_debug_message("Checking href for token: " + string(_href));
+		var _token_pos = string_pos("token=", _href);
+		if (_token_pos > 0) {
+			var _token_start = _token_pos + 6;
+			var _token_end = string_pos("&", string_copy(_href, _token_start, string_length(_href)));
+			if (_token_end == 0) {
+				_token = string_copy(_href, _token_start, string_length(_href));
+			} else {
+				_token = string_copy(_href, _token_start, _token_end - 1);
+			}
+			show_debug_message("Token found via href: " + _token);
+		}
+	}
+	
+	// Check for devvit token in os_get_info
+	var _devvit_token = ds_map_find_value(_info, "devvit.token");
+	if (!is_undefined(_devvit_token) && _devvit_token != "") {
+		_token = _devvit_token;
+		show_debug_message("Token found via devvit.token: " + _token);
+	}
+	
+	ds_map_destroy(_info);
+	
+	show_debug_message("Final token value: " + _token);
 	return _token;
 }

@@ -65,3 +65,18 @@ if (game_over)
     draw_set_halign(fa_left);
     draw_set_valign(fa_top);
 }
+
+// Draw debug logs on screen (for mobile debugging)
+draw_set_color(c_yellow);
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);
+draw_set_alpha(0.9);
+
+var log_y = 60;
+for (var i = 0; i < array_length(global.debug_logs); i++) {
+	draw_text(8, log_y, global.debug_logs[i]);
+	log_y += 16;
+}
+
+draw_set_alpha(1.0);
+draw_set_color(c_white);

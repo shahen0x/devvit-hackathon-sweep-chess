@@ -21,7 +21,13 @@ function api_get_board_data(_callback) {
 	
 	// Build request headers
 	var _headers = ds_map_create();
-	ds_map_add(_headers, "Authorization", $"Bearer {reddit_get_token()}");
+	
+	// Only add Authorization header if we have a real token
+	// On mobile, credentials are passed via cookies (use-credentials mode)
+	var _token = reddit_get_token();
+	if (_token != "noone" && _token != "") {
+		ds_map_add(_headers, "Authorization", $"Bearer {_token}");
+	}
 	
 	// Make request
 	var _req = http_request(_url, "GET", _headers, "");
@@ -46,7 +52,13 @@ function api_submit_score(_totalMoves, _cellsTravelled, _callback) {
 	
 	// Build request headers
 	var _headers = ds_map_create();
-	ds_map_add(_headers, "Authorization", $"Bearer {reddit_get_token()}");
+	
+	// Only add Authorization header if we have a real token
+	// On mobile, credentials are passed via cookies (use-credentials mode)
+	var _token = reddit_get_token();
+	if (_token != "noone" && _token != "") {
+		ds_map_add(_headers, "Authorization", $"Bearer {_token}");
+	}
 	ds_map_add(_headers, "Content-Type", "application/json");
 	
 	// Build request body

@@ -1,11 +1,29 @@
-// Detect if we're in Test mode vs Reddit/Production build
-// Reddit builds should have a real auth token, test runs typically use "noone"
-is_reddit_build = (reddit_get_token() != "noone");
-is_test_build = (!is_reddit_build) && (GM_build_type == "run");
-show_debug_message("Build type: " + string(GM_build_type) +
-	" | Token: " + string(reddit_get_token()) +
-	" | Is Reddit Build: " + string(is_reddit_build) +
-	" | Is Test Build: " + string(is_test_build));
+// Visual debug log for mobile (can't see console there)
+global.debug_logs = [];
+global.max_debug_logs = 15; // Keep last 15 messages
+
+/// @func debug_log(msg)
+/// @param {String} msg The message to log
+function debug_log(msg) {
+	show_debug_message(msg);
+	array_push(global.debug_logs, string(msg));
+	if (array_length(global.debug_logs) > global.max_debug_logs) {
+		array_delete(global.debug_logs, 0, 1);
+	}
+}
+
+debug_log("=== Game Starting ===");
+//debug_log("Mobile: " + string(global.is_mobile));
+//debug_log("OS: " + string(os_type));
+
+// Log os_get_info keys for debugging
+var _info = os_get_info();
+var _keys = ds_map_keys_to_array(_info);
+debug_log("os_info keys: " + string(array_length(_keys)));
+for (var _k = 0; _k < min(5, array_length(_keys)); _k++) {
+	debug_log("  " + string(_keys[_k]));
+}
+ds_map_destroy(_info);
 
 board = array_create(BOARD_SIZE);
 board_offset_x = (room_width - BOARD_SIZE * CELL_SIZE) div 2;
@@ -107,73 +125,22 @@ for (var i = 0; i < num_pawns; i++)
 ds_map_destroy(occupied_cells);
 */
 
-// For Test builds, use random spawning and mark board as loaded
-if (is_test_build) {
-	show_debug_message("=== Test Build: Using random pawn spawning ===");
-	var num_pawns = 16; // Change this number to spawn more/fewer pawns
-	var occupied_cells = ds_map_create(); // Track occupied cells
-	occupied_cells[? "0,0"] = true; // Queen's position
-	occupied_cells[? "1,0"] = true; // Rook's position
-	occupied_cells[? "2,0"] = true; // Bishop's position
-	occupied_cells[? "3,0"] = true; // Knight's position
+// Fetch board data from server
+debug_log("Fetching board data...");
+debug_log("URL: " + reddit_get_base_url());
+debug_log("Token: " + reddit_get_token());
 
-	for (var i = 0; i < num_pawns; i++)
-	{
-		var attempts = 0;
-		var found_spot = false;
-		var spawn_x, spawn_y;
-		
-		// Try to find an empty cell (max 100 attempts)
-		while (attempts < 100 && !found_spot)
-		{
-			spawn_x = irandom(BOARD_SIZE - 1);
-			spawn_y = irandom(BOARD_SIZE - 1);
-			var key = string(spawn_x) + "," + string(spawn_y);
-			
-			if (!ds_map_exists(occupied_cells, key))
-			{
-				found_spot = true;
-				occupied_cells[? key] = true;
-			}
-			attempts++;
-		}
-		
-		if (found_spot)
-		{
-			var new_pawn = instance_create_layer(
-				board_offset_x + spawn_x * CELL_SIZE,
-				board_offset_y + spawn_y * CELL_SIZE,
-				"Pieces",
-				oPawn
-			);
-			
-			new_pawn.cell_x = spawn_x;
-			new_pawn.cell_y = spawn_y;
-			new_pawn.board = id;
-			new_pawn.px = board_offset_x + spawn_x * CELL_SIZE;
-			new_pawn.py = board_offset_y + spawn_y * CELL_SIZE;
-			show_debug_message("Test Pawn " + string(i) + " spawned at: " + string(spawn_x) + "," + string(spawn_y));
-		}
-	}
-
-	ds_map_destroy(occupied_cells);
-	board_data_loaded = true; // Mark as loaded for test builds
-	show_debug_message("Test build: board_data_loaded set to true");
-}
-
-// For Reddit/Production builds, fetch board data from server
-if (!is_test_build) {
 api_get_board_data(function(_http_status, _ok, _result, _payload) {
-	show_debug_message("=== Board data received from server ===");
-	show_debug_message("HTTP Status: " + string(_http_status ?? "undefined"));
-	show_debug_message("Success: " + string(_ok ?? "undefined"));
-	show_debug_message("Result: " + string(_result ?? "undefined"));
+	debug_log("=== Response ===");
+	debug_log("HTTP: " + string(_http_status ?? "undef"));
+	debug_log("OK: " + string(_ok ?? "undef"));
+	debug_log("Len: " + string(string_length(_result ?? "")));
 	
 	// Try to parse the result as JSON
 	if (_ok && !is_undefined(_result) && _result != "") {
 		try {
 			var _data = json_parse(_result);
-			show_debug_message("Parsed data: " + json_stringify(_data));
+			debug_log("JSON parsed OK");
 			
 			// Spawn pawns from server board data
 			// board[x][y] where board[x] is the column array, y is the row index
@@ -201,7 +168,7 @@ api_get_board_data(function(_http_status, _ok, _result, _payload) {
 							new_pawn.board = _board_ref;
 							new_pawn.px = _board_ref.board_offset_x + _x * CELL_SIZE;
 							new_pawn.py = _board_ref.board_offset_y + _screen_y * CELL_SIZE;
-							show_debug_message("Pawn spawned from server at: " + string(_x) + "," + string(_screen_y));
+							debug_log("Pawn at: " + string(_x) + "," + string(_screen_y));
 							}
 						}
 					}
@@ -209,10 +176,12 @@ api_get_board_data(function(_http_status, _ok, _result, _payload) {
 			}
 			// Mark board data as loaded after processing
 			_board_ref.board_data_loaded = true;
-			show_debug_message("Board data loaded successfully!");
+			debug_log("Board loaded!");
 		} catch(_ex) {
-			show_debug_message("Failed to parse JSON: " + string(_ex));
+			debug_log("JSON Error: " + string(_ex));
 		}
+	} else {
+		debug_log("Fetch failed or empty");
+		debug_log("_ok=" + string(_ok));
 	}
 });
-}
