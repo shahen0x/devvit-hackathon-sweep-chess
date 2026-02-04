@@ -22,19 +22,27 @@ router.get('/api/leaderboard', async (req: Request, res: Response): Promise<void
 
 		const limit = 50;
 		const leaderboardKey = `leaderboard:${postId}`;
+		console.log('[LEADERBOARD] Fetching from key:', leaderboardKey);
 
-		// Fetch top 50 users with scores (highest compositeScore = best rank)
-		const entries = await redis.zRange(leaderboardKey, 0, limit - 1, { by: 'score' });
+		// Fetch top 50 users with scores
+		// Note: Devvit Redis zRange returns in ascending order (lowest scores first)
+		// Since we want highest scores first, we'll need to reverse the array
+		const entries = await redis.zRange(leaderboardKey, 0, limit - 1);
+		console.log('[LEADERBOARD] Raw entries:', JSON.stringify(entries, null, 2));
 
 		// If no entries, return empty array
 		if (!entries || entries.length === 0) {
+			console.log('[LEADERBOARD] No entries found');
 			res.json([]);
 			return;
 		}
 
+		// Reverse to get highest scores first
+		const sortedEntries = [...entries].reverse();
+
 		// Fetch user metadata and stats in parallel
 		const leaderboard = await Promise.all(
-			entries.map(async (entry, index) => {
+			sortedEntries.map(async (entry, index) => {
 				const userId = entry.member;
 				const userKey = `user:${userId}`;
 				const statsKey = `user:${userId}:stats:${postId}`;
@@ -58,6 +66,7 @@ router.get('/api/leaderboard', async (req: Request, res: Response): Promise<void
 			})
 		);
 
+		console.log('[LEADERBOARD] Returning leaderboard with', leaderboard.length, 'entries');
 		res.json(leaderboard);
 	} catch (error) {
 		console.error('Leaderboard Error:', error);
