@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import '@/index.css';
+import '@/global.css';
 import GameCanvas from '@/components/GameCanvas';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

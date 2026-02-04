@@ -1,13 +1,17 @@
 import React, { useEffect, useMemo } from 'react';
 import ReactDOM from 'react-dom/client';
-import '@/index.css';
-import { context } from '@devvit/web/client';
+import '@/global.css';
+import { context, requestExpandedMode } from '@devvit/web/client';
 import { Button } from '@/components/ui/button';
 import { Chessboard } from 'react-chessboard';
 
 function Splash() {
     const username = context.username ?? 'Player';
     console.log(context.postData);
+
+    const handleStartGame = (e: React.MouseEvent<HTMLButtonElement>) => {
+        requestExpandedMode(e.nativeEvent, 'game');
+    };
 
     useEffect(() => {
         async function fetchData() {
@@ -124,6 +128,12 @@ function Splash() {
                 <Button
                     className='mt-6'
                     onClick={handleSubmitScore}
+                >
+                    Test
+                </Button>
+                <Button
+                    className='mt-6'
+                    onClick={handleStartGame}
                 >
                     Make Your Move
                 </Button>
