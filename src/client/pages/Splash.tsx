@@ -8,22 +8,12 @@ interface SplashProps {
 }
 
 // API functions
-const fetchBoardData = async () => {
-	const response = await fetch('/api/board-data');
+const fetchLeaderboard = async () => {
+	const response = await fetch('/api/leaderboard');
 	if (!response.ok) {
 		throw new Error(`HTTP error! status: ${response.status}`);
 	}
-	const data = await response.json();
-	if (data.status === 'success') {
-		console.log('Board data received:', data);
-		console.log('Board:', data.board);
-		console.log('Game ID:', data.gameId);
-		console.log('Display Name', data.userDisplayName);
-		console.log('Avatar', data.avatar);
-		return data;
-	} else {
-		throw new Error('Invalid response from /api/board-data');
-	}
+	return response.json();
 };
 
 const submitScore = async (scoreData: { totalMoves: number; cellsTravelled: number }) => {
@@ -40,19 +30,30 @@ const submitScore = async (scoreData: { totalMoves: number; cellsTravelled: numb
 	return response.json();
 };
 
+const deleteScore = async () => {
+	const response = await fetch(`/api/delete-score`, {
+		method: 'POST',
+	});
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+	return response.json();
+};
+
 export default function Splash({ onShowLeaderboard }: SplashProps) {
 	const username = context.username ?? 'Player';
-	console.log(context.postData);
 
 	const handleStartGame = (e: React.MouseEvent<HTMLButtonElement>) => {
 		requestExpandedMode(e.nativeEvent, 'game');
 	};
 
 	// Fetch board data
-	const { isLoading, error } = useQuery({
+	const { data } = useQuery({
 		queryKey: ['boardData'],
-		queryFn: fetchBoardData,
+		queryFn: fetchLeaderboard,
 	});
+
+	console.log('🎯🎯 Leaderboard', data);
 
 	// Submit score mutation
 	const submitScoreMutation = useMutation({
@@ -65,11 +66,26 @@ export default function Splash({ onShowLeaderboard }: SplashProps) {
 		},
 	});
 
+	// Delete score mutation
+	const deleteScoreMutation = useMutation({
+		mutationFn: deleteScore,
+		onSuccess: (data) => {
+			console.log('Score deleted:', data);
+		},
+		onError: (error) => {
+			console.error('Error deleting score:', error);
+		},
+	});
+
 	const handleSubmitScore = () => {
 		submitScoreMutation.mutate({
 			totalMoves: 10,
 			cellsTravelled: 20,
 		});
+	};
+
+	const handleDeleteScore = () => {
+		deleteScoreMutation.mutate();
 	};
 
 	return (
@@ -84,26 +100,21 @@ export default function Splash({ onShowLeaderboard }: SplashProps) {
 
 			{/* Content */}
 			<div className="flex flex-col items-center gap-2 px-4">
-				{isLoading ? (
-					<div className="text-muted-foreground">Loading board...</div>
-				) : error ? (
-					<div className="text-destructive">Error loading board data</div>
-				) : (
-					<ChessboardPreview />
-				)}
+				<ChessboardPreview />
 
-				<div>
+				<div className="flex flex-col gap-2">
 					<Button
 						className="mt-6"
 						onClick={handleSubmitScore}
 						disabled={submitScoreMutation.isPending}
 					>
-						{submitScoreMutation.isPending ? 'Submitting...' : 'Test'}
+						{submitScoreMutation.isPending ? 'Submitting...' : 'Test Submit Score'}
 					</Button>
-					<Button className="mt-6" onClick={handleStartGame}>
-						Make Your Move
+					<Button variant="destructive" onClick={handleDeleteScore}>
+						{deleteScoreMutation.isPending ? 'Deleting...' : 'Delete My Score'}
 					</Button>
-					<Button variant="outline" className="mt-2" onClick={onShowLeaderboard}>
+					<Button onClick={handleStartGame}>Make Your Move</Button>
+					<Button variant="outline" onClick={onShowLeaderboard}>
 						View Leaderboard
 					</Button>
 				</div>

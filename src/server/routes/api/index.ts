@@ -1,13 +1,17 @@
-import { Router } from "express";
-import initRoute from "./init";
-import boardDataRoute from "./board-data";
-import submitScore from "./submit-score";
+import { Router } from 'express';
+import initRoute from './init';
+import boardDataRoute from './board-data';
+import submitScore from './submit-score';
+import leaderboard from './leaderboard';
+import deleteScore from './delete-score';
 
 const router = Router();
 
 // Mount API routes
 router.use(initRoute);
 router.use(boardDataRoute);
-router.use(submitScore)
+router.use(submitScore);
+router.use(leaderboard);
+router.use(deleteScore);
 
 export default router;

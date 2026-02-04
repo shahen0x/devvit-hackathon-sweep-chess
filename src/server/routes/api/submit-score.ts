@@ -1,60 +1,94 @@
 import type { Request, Response } from 'express';
-import { Router } from "express";
-import { context, reddit, redis } from "@devvit/web/server";
+import { Router } from 'express';
+import { context, redis } from '@devvit/web/server';
 
 const router = Router();
 
 /**
- * GET /api/submit-score
+ * POST /api/submit-score
  * Submit user score to leaderboard
  */
-router.post("/api/submit-score", async (req: Request, res:Response): Promise<void> => {
-    
-    try {
-        const { postId, postData } = context;
-        const { totalMoves, cellsTravelled } = req.body;
-        const currentUser = await reddit.getCurrentUser();
-    
-        if (!postId) {
-            console.error("API Board Data Error: postId not found in devvit context");
-            res.status(400).json({
-                status: "error",
-                message: "postId is required but missing from context",
-            });
-            return;
-        }
+router.post('/api/submit-score', async (req: Request, res: Response): Promise<void> => {
+	try {
+		const { postId, userId, username, snoovatar } = context;
+		const { totalMoves, cellsTravelled } = req.body;
 
-        if (!currentUser) {
-            console.error("API Board Data Error: User not found in devvit context");
-            res.status(400).json({
-                status: "error",
-                message: "User is required but missing from context",
-            });
-            return;
-        }
+		if (!postId) {
+			res.status(400).json({
+				status: 'error',
+				message: 'Unable to find postId',
+			});
+			return;
+		}
 
-        const userId = currentUser.id;
-        const avatar = await currentUser.getSnoovatarUrl() || null;
+		if (!userId) {
+			res.status(400).json({
+				status: 'error',
+				message: 'User must be logged in',
+			});
+			return;
+		}
 
+		if (
+			typeof totalMoves !== 'number' ||
+			typeof cellsTravelled !== 'number' ||
+			totalMoves < 0 ||
+			cellsTravelled < 0
+		) {
+			res.status(400).json({
+				status: 'error',
+				message: 'Invalid score data',
+			});
+			return;
+		}
 
+		// Redis keys
+		const userKey = `user:${userId}`;
+		const leaderboardKey = `leaderboard:${postId}`;
+		const statsKey = `user:${userId}:stats:${postId}`;
 
+		// Create or update user data
+		await redis.hSet(userKey, {
+			username: username || 'Anonymous',
+			avatar: snoovatar || 'none',
+		});
 
-        // Return the board data from postData
-        res.json({
-            status: "success",
-            totalMoves,
-            cellsTravelled,
-            currentUser,
-            avatar
-        });
-    } catch (error) {
+		// Score calculation (higher is better - fewer moves/cells = higher score)
+		const compositeScore = (1 / (totalMoves + cellsTravelled)) * 10000;
 
-        let errorMessage = "Unknown error fetching board data";
-        if (error instanceof Error) {
-            errorMessage = `Failed to fetch board data: ${error.message}`;
-        }
-        res.status(400).json({ status: "error", message: errorMessage });
-    }
+		// Get previous score from leaderboard
+		const previousScoreStr = await redis.zScore(leaderboardKey, userId);
+		const previousScore = previousScoreStr ? Number(previousScoreStr) : null;
+
+		// Only update if new score is better (or if no previous score exists)
+		let accepted = false;
+		if (previousScore === null || compositeScore > previousScore) {
+			accepted = true;
+
+			// Update leaderboard
+			await redis.zAdd(leaderboardKey, {
+				score: compositeScore,
+				member: userId,
+			});
+
+			// Update leaderboard-specific stats for display
+			await redis.hSet(statsKey, {
+				totalMoves: totalMoves.toString(),
+				cellsTravelled: cellsTravelled.toString(),
+			});
+		}
+
+		res.json({
+			status: 'success',
+			accepted,
+		});
+	} catch (error) {
+		let errorMessage = 'Unknown error submitting score';
+		if (error instanceof Error) {
+			errorMessage = `Failed to submit score: ${error.message}`;
+		}
+		res.status(500).json({ status: 'error', message: errorMessage });
+	}
 });
 
 export default router;
