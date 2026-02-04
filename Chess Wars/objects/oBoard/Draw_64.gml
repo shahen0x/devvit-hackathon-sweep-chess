@@ -114,3 +114,45 @@ if (game_over)
 //    draw_set_halign(fa_left);
 //    draw_set_valign(fa_top);
 //}
+
+// Draw debug info on top right corner
+draw_set_halign(fa_right);
+draw_set_valign(fa_top);
+draw_set_color(c_yellow);
+draw_set_alpha(0.9);
+
+var debug_x = room_width - 8;
+var debug_y = 8;
+var line_height = 20;
+
+draw_text(debug_x, debug_y, "browser_width: " + string(browser_width));
+debug_y += line_height;
+draw_text(debug_x, debug_y, "browser_height: " + string(browser_height));
+debug_y += line_height;
+draw_text(debug_x, debug_y, "display_get_width(): " + string(display_get_width()));
+debug_y += line_height;
+draw_text(debug_x, debug_y, "display_get_height(): " + string(display_get_height()));
+debug_y += line_height;
+draw_text(debug_x, debug_y, "os_type: " + string(os_type));
+debug_y += line_height;
+draw_text(debug_x, debug_y, "os_browser: " + string(os_browser));
+debug_y += line_height;
+
+// Check if running in browser using alternative method
+var is_web = (os_type == os_browser);
+draw_text(debug_x, debug_y, "is_web: " + string(is_web));
+debug_y += line_height;
+
+// User agent check (HTML5 only)
+if (os_type == os_browser) {
+    var ua = os_get_info()[? "browser_user_agent"];
+    if (!is_undefined(ua)) {
+        draw_text(debug_x, debug_y, "User Agent: " + string_copy(ua, 1, 30) + "...");
+    }
+}
+
+// Reset draw settings
+draw_set_alpha(1.0);
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);
+draw_set_color(c_white);
