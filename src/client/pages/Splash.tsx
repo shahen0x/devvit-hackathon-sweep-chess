@@ -79,7 +79,7 @@ export default function Splash({ onShowLeaderboard }: SplashProps) {
 
 	const handleSubmitScore = () => {
 		submitScoreMutation.mutate({
-			totalMoves: 10,
+			totalMoves: 5,
 			cellsTravelled: 20,
 		});
 	};
