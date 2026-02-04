@@ -28,11 +28,6 @@ if (is_selected && array_length(valid_moves) > 0)
     draw_set_alpha(1.0);
 }
 
-// Draw a placeholder rectangle if no sprite (using px, py for smooth movement)
-//draw_set_color(c_purple);
-//draw_rectangle(px, py, px + CELL_SIZE, py + CELL_SIZE, false);
-//draw_set_color(c_white);
-
 // Animate spawn scale
 if (spawn_animating)
 {
@@ -44,7 +39,12 @@ if (spawn_animating)
     }
 }
 
-// Draw sprite with spawn scale (from center since origin is middle)
-var draw_x = px + CELL_SIZE / 2;
-var draw_y = py + CELL_SIZE / 2;
-draw_sprite_ext(sprite_index, image_index, draw_x, draw_y, spawn_scale, spawn_scale, 0, c_white, 1);
+// Draw 144x144 sprite stretched to fit CELL_SIZE with spawn animation
+draw_set_color(c_white);
+draw_set_alpha(1);
+
+// Calculate scaled size for spawn animation
+var scaled_size = CELL_SIZE * spawn_scale * 0.9;
+var offset = (CELL_SIZE - scaled_size) / 2;
+
+draw_sprite_stretched(sprite_index, image_index, px + offset, py + offset, scaled_size, scaled_size);
