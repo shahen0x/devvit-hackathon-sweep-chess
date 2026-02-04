@@ -43,26 +43,33 @@ if (!any_piece_moving && board_data_loaded)
         
         game_over = true;
         
-        // Submit score to server
-        api_submit_score(total_moves, cells_travelled, function(_http_status, _ok, _result, _payload) {
-            show_debug_message("=== Score submission response ===");
-            show_debug_message("HTTP Status: " + string(_http_status ?? "undefined"));
-            show_debug_message("Success: " + string(_ok ?? "undefined"));
-            show_debug_message("Result: " + string(_result ?? "undefined"));
-            
+        // Submit score to server (skip in test builds)
+        if (is_test_build) {
+            show_debug_message("Test build: skipping score submission.");
             score_submitted = true;
-            
-            if (_ok && (_http_status == 200 || _http_status == 201)) {
-                score_submission_status = "success";
-                show_debug_message("Score submitted successfully!");
-            } else {
-                score_submission_status = "failed";
-                show_debug_message("Failed to submit score.");
-            }
-            
-            // Enable restart button after receiving response
+            score_submission_status = "success";
             restart_button_enabled = true;
-        });
+        } else {
+            api_submit_score(total_moves, cells_travelled, function(_http_status, _ok, _result, _payload) {
+                show_debug_message("=== Score submission response ===");
+                show_debug_message("HTTP Status: " + string(_http_status ?? "undefined"));
+                show_debug_message("Success: " + string(_ok ?? "undefined"));
+                show_debug_message("Result: " + string(_result ?? "undefined"));
+                
+                score_submitted = true;
+                
+                if (_ok && (_http_status == 200 || _http_status == 201)) {
+                    score_submission_status = "success";
+                    show_debug_message("Score submitted successfully!");
+                } else {
+                    score_submission_status = "failed";
+                    show_debug_message("Failed to submit score.");
+                }
+                
+                // Enable restart button after receiving response
+                restart_button_enabled = true;
+            });
+        }
     }
 }
 

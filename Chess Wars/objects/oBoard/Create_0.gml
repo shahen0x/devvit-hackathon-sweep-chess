@@ -1,3 +1,12 @@
+// Detect if we're in Test mode vs Reddit/Production build
+// Reddit builds should have a real auth token, test runs typically use "noone"
+is_reddit_build = (reddit_get_token() != "noone");
+is_test_build = (!is_reddit_build) && (GM_build_type == "run");
+show_debug_message("Build type: " + string(GM_build_type) +
+	" | Token: " + string(reddit_get_token()) +
+	" | Is Reddit Build: " + string(is_reddit_build) +
+	" | Is Test Build: " + string(is_test_build));
+
 board = array_create(BOARD_SIZE);
 board_offset_x = (room_width - BOARD_SIZE * CELL_SIZE) div 2;
 board_offset_y = (room_height - BOARD_SIZE * CELL_SIZE) div 2;
@@ -98,7 +107,62 @@ for (var i = 0; i < num_pawns; i++)
 ds_map_destroy(occupied_cells);
 */
 
-// Fetch board data from server
+// For Test builds, use random spawning and mark board as loaded
+if (is_test_build) {
+	show_debug_message("=== Test Build: Using random pawn spawning ===");
+	var num_pawns = 16; // Change this number to spawn more/fewer pawns
+	var occupied_cells = ds_map_create(); // Track occupied cells
+	occupied_cells[? "0,0"] = true; // Queen's position
+	occupied_cells[? "1,0"] = true; // Rook's position
+	occupied_cells[? "2,0"] = true; // Bishop's position
+	occupied_cells[? "3,0"] = true; // Knight's position
+
+	for (var i = 0; i < num_pawns; i++)
+	{
+		var attempts = 0;
+		var found_spot = false;
+		var spawn_x, spawn_y;
+		
+		// Try to find an empty cell (max 100 attempts)
+		while (attempts < 100 && !found_spot)
+		{
+			spawn_x = irandom(BOARD_SIZE - 1);
+			spawn_y = irandom(BOARD_SIZE - 1);
+			var key = string(spawn_x) + "," + string(spawn_y);
+			
+			if (!ds_map_exists(occupied_cells, key))
+			{
+				found_spot = true;
+				occupied_cells[? key] = true;
+			}
+			attempts++;
+		}
+		
+		if (found_spot)
+		{
+			var new_pawn = instance_create_layer(
+				board_offset_x + spawn_x * CELL_SIZE,
+				board_offset_y + spawn_y * CELL_SIZE,
+				"Pieces",
+				oPawn
+			);
+			
+			new_pawn.cell_x = spawn_x;
+			new_pawn.cell_y = spawn_y;
+			new_pawn.board = id;
+			new_pawn.px = board_offset_x + spawn_x * CELL_SIZE;
+			new_pawn.py = board_offset_y + spawn_y * CELL_SIZE;
+			show_debug_message("Test Pawn " + string(i) + " spawned at: " + string(spawn_x) + "," + string(spawn_y));
+		}
+	}
+
+	ds_map_destroy(occupied_cells);
+	board_data_loaded = true; // Mark as loaded for test builds
+	show_debug_message("Test build: board_data_loaded set to true");
+}
+
+// For Reddit/Production builds, fetch board data from server
+if (!is_test_build) {
 api_get_board_data(function(_http_status, _ok, _result, _payload) {
 	show_debug_message("=== Board data received from server ===");
 	show_debug_message("HTTP Status: " + string(_http_status ?? "undefined"));
@@ -151,3 +215,4 @@ api_get_board_data(function(_http_status, _ok, _result, _payload) {
 		}
 	}
 });
+}
