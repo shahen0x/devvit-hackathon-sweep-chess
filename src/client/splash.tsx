@@ -1,9 +1,45 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import '@/global.css';
 import { context, requestExpandedMode } from '@devvit/web/client';
 import { Button } from '@/components/ui/button';
-import { Chessboard } from 'react-chessboard';
+import ChessboardPreview from '@/components/ChessboardPreview';
+import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
+
+// API functions
+const fetchBoardData = async () => {
+    const response = await fetch("/api/board-data");
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    if (data.status === "success") {
+        console.log('Board data received:', data);
+        console.log('Board:', data.board);
+        console.log('Game ID:', data.gameId);
+        console.log('Display Name', data.userDisplayName);
+        console.log('Avatar', data.avatar);
+        return data;
+    } else {
+        throw new Error("Invalid response from /api/board-data");
+    }
+};
+
+const submitScore = async (scoreData: { totalMoves: number; cellsTravelled: number }) => {
+    const response = await fetch("/api/submit-score", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(scoreData)
+    });
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+};
 
 function Splash() {
     const username = context.username ?? 'Player';
@@ -13,88 +49,29 @@ function Splash() {
         requestExpandedMode(e.nativeEvent, 'game');
     };
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await fetch("/api/board-data");
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = (await response.json());
-                if (data.status === "success") {
-                    console.log('Board data received:', data);
-                    console.log('Board:', data.board);
-                    console.log('Game ID:', data.gameId);
-                    console.log('Display Name', data.userDisplayName)
-                    console.log('Avatar', data.avatar)
-                } else {
-                    console.error("Invalid response from /api/board-data", data);
-                }
-            } catch (error) {
-                console.error("Error fetching board data:", error);
-            }
+    // Fetch board data
+    const { isLoading, error } = useQuery({
+        queryKey: ['boardData'],
+        queryFn: fetchBoardData
+    });
+
+    // Submit score mutation
+    const submitScoreMutation = useMutation({
+        mutationFn: submitScore,
+        onSuccess: (data) => {
+            console.log("👌👌", data);
+        },
+        onError: (error) => {
+            console.error("Error submitting score:", error);
         }
+    });
 
-        fetchData();
-    }, []);
-
-    // Custom piece components
-    const customPieces = useMemo(() => ({
-        bP: () => (
-            <img
-                src="/images/piece-pawn.svg"
-                alt="pawn"
-                className='w-full h-full p-0.5'
-            />
-        ),
-    }), []);
-
-    // Convert board array to chess position object
-    const boardPosition = useMemo(() => {
-        const board = context.postData?.board as number[][] | undefined;
-        if (!board) return {};
-
-        const position: Record<string, { pieceType: string }> = {};
-        const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-
-        // Place pawns based on board data
-        // board[x][y] where board[x] is the column array, y is the row index
-        // board[0] = column 'a', board[1] = column 'b', etc.
-        // board[x][0] = rank 1, board[x][7] = rank 8
-        for (let x = 0; x < 8; x++) {
-            const file = files[x];
-            for (let y = 0; y < 8; y++) {
-                if (board[x]?.[y] === 1) {
-                    const rank = y + 1; // y=0 -> rank 1, y=7 -> rank 8
-                    position[`${file}${rank}`] = { pieceType: 'bP' }; // Black pawn
-                }
-            }
-        }
-
-        return position;
-    }, [context.postData]);
-
-    async function handleSubmitScore() {
-        try {
-            const response = await fetch("/api/submit-score", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    totalMoves: 10,
-                    cellsTravelled: 20
-                })
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = (await response.json());
-            console.log("👌👌", data)
-        } catch (error) {
-            console.error("Error fetching board data:", error);
-        }
-    }
+    const handleSubmitScore = () => {
+        submitScoreMutation.mutate({
+            totalMoves: 10,
+            cellsTravelled: 20
+        });
+    };
 
     return (
         <div className="relative h-screen bg-background pt-6 flex flex-col justify-between items-center gap-4">
@@ -110,26 +87,20 @@ function Splash() {
 
             {/* Content */}
             <div className="flex flex-col items-center gap-2 px-4">
-                <div style={{ width: '250px' }}>
-                    <Chessboard options={{
-                        position: boardPosition,
-                        allowDragging: false,
-                        boardStyle: {
-                            border: '1px solid #BFA280'
-                        },
-                        lightSquareStyle: { backgroundColor: '#EDD6BB' },
-                        darkSquareStyle: { backgroundColor: '#D9BE9E' },
-                        pieces: customPieces,
-                        showNotation: false
-                    }}
-                    />
-                </div>
+                {isLoading ? (
+                    <div className="text-muted-foreground">Loading board...</div>
+                ) : error ? (
+                    <div className="text-destructive">Error loading board data</div>
+                ) : (
+                    <ChessboardPreview />
+                )}
 
                 <Button
                     className='mt-6'
                     onClick={handleSubmitScore}
+                    disabled={submitScoreMutation.isPending}
                 >
-                    Test
+                    {submitScoreMutation.isPending ? 'Submitting...' : 'Test'}
                 </Button>
                 <Button
                     className='mt-6'
@@ -149,6 +120,8 @@ function Splash() {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <Splash />
+        <QueryClientProvider client={queryClient}>
+            <Splash />
+        </QueryClientProvider>
     </React.StrictMode>
 );
