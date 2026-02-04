@@ -3,7 +3,7 @@ import { context, requestExpandedMode } from '@devvit/web/client';
 import { Button } from '@/components/ui/button';
 import ChessboardPreview from '@/components/ChessboardPreview';
 import DevBox from '@/components/DevBox';
-import { ArrowUp, ChessQueen } from 'lucide-react';
+import { ArrowUp, ChessQueen, MoveRight } from 'lucide-react';
 
 interface SplashProps {
 	onShowLeaderboard: () => void;
@@ -30,20 +30,40 @@ export default function Splash({ onShowLeaderboard }: SplashProps) {
 			<div className="flex flex-col items-center gap-2 px-4">
 				<ChessboardPreview />
 
-				<div className="flex gap-1">
+				<div className="mt-1 mb-2 flex gap-1 opacity-40 animate-pulse">
 					<ArrowUp size={16} />
 					<ArrowUp size={16} />
 				</div>
 
 				<div className="flex gap-1">
-					<img src="/chess-pieces/rook.svg" width={48} height={48} className="size-5" />
-					<img src="/chess-pieces/queen.svg" width={48} height={48} className="size-5" />
-					<img src="/chess-pieces/knight.svg" width={48} height={48} className="size-5" />
-					<img src="/chess-pieces/bishop.svg" width={48} height={48} className="size-5" />
+					<img
+						src="/chess-pieces/rook.svg"
+						width={48}
+						height={48}
+						className="size-5 animate-[bounce-forward_2s_ease-in-out_infinite]"
+					/>
+					<img
+						src="/chess-pieces/queen.svg"
+						width={48}
+						height={48}
+						className="size-5 animate-[bounce-forward_2s_ease-in-out_0.2s_infinite]"
+					/>
+					<img
+						src="/chess-pieces/knight.svg"
+						width={48}
+						height={48}
+						className="size-5 animate-[bounce-forward_2s_ease-in-out_0.4s_infinite]"
+					/>
+					<img
+						src="/chess-pieces/bishop.svg"
+						width={48}
+						height={48}
+						className="size-5 animate-[bounce-forward_2s_ease-in-out_0.6s_infinite]"
+					/>
 				</div>
 
-				<Button onClick={handleStartGame} className="mt-2">
-					<ChessQueen /> Make Your Move
+				<Button onClick={handleStartGame} className="mt-1">
+					Make Your Move <MoveRight />
 				</Button>
 			</div>
 
