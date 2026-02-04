@@ -1,18 +1,13 @@
-import '@/index.css';
-
 import React, { useEffect, useMemo } from 'react';
-import { requestExpandedMode, context } from '@devvit/web/client';
+import ReactDOM from 'react-dom/client';
+import '@/index.css';
+import { context } from '@devvit/web/client';
 import { Button } from '@/components/ui/button';
 import { Chessboard } from 'react-chessboard';
 
-
-export default function AppSplash() {
+function Splash() {
     const username = context.username ?? 'Player';
     console.log(context.postData);
-
-    const handleStartClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        requestExpandedMode(e.nativeEvent, 'game');
-    };
 
     useEffect(() => {
         async function fetchData() {
@@ -72,38 +67,33 @@ export default function AppSplash() {
             }
         }
 
-        // console.log('Board position:', position);
         return position;
     }, [context.postData]);
 
-
-
-
     async function handleSubmitScore() {
-            try {
-                const response = await fetch("/api/submit-score", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        totalMoves: 10,
-                        cellsTravelled: 20
-                    })
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = (await response.json());
-                console.log("👌👌", data)
-            } catch (error) {
-                console.error("Error fetching board data:", error);
+        try {
+            const response = await fetch("/api/submit-score", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    totalMoves: 10,
+                    cellsTravelled: 20
+                })
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            const data = (await response.json());
+            console.log("👌👌", data)
+        } catch (error) {
+            console.error("Error fetching board data:", error);
         }
+    }
 
     return (
         <div className="relative h-screen bg-background pt-6 flex flex-col justify-between items-center gap-4">
-
             {/* Header */}
             <header className="px-4 space-y-2 text-center">
                 <div className="text-xs font-bold font-title text-primary">
@@ -116,12 +106,6 @@ export default function AppSplash() {
 
             {/* Content */}
             <div className="flex flex-col items-center gap-2 px-4">
-                {/* <img
-                    src="/images/board.png"
-                    className="max-w-[200px] w-auto h-auto"
-                    alt="Chess board"
-                /> */}
-
                 <div style={{ width: '250px' }}>
                     <Chessboard options={{
                         position: boardPosition,
@@ -139,9 +123,6 @@ export default function AppSplash() {
 
                 <Button
                     className='mt-6'
-                    // size="lg"
-                    // className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 active:from-violet-800 active:to-purple-800 text-white font-semibold px-6 py-6 rounded-xl text-lg cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
-                    // onClick={handleStartClick}
                     onClick={handleSubmitScore}
                 >
                     Make Your Move
@@ -155,3 +136,9 @@ export default function AppSplash() {
         </div>
     );
 }
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+        <Splash />
+    </React.StrictMode>
+);
