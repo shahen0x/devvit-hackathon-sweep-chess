@@ -31,7 +31,21 @@ if (is_selected && array_length(valid_moves) > 0)
 // Draw the rook sprite if assigned, otherwise draw a placeholder
 if (sprite_index != -1)
 {
-    draw_sprite(sprite_index, image_index, px, py);
+    // Animate spawn scale
+    if (spawn_animating)
+    {
+        spawn_scale += spawn_speed;
+        if (spawn_scale >= 1)
+        {
+            spawn_scale = 1;
+            spawn_animating = false;
+        }
+    }
+    
+    // Draw sprite with spawn scale (from center since origin is middle)
+    var draw_x = px + CELL_SIZE / 2;
+    var draw_y = py + CELL_SIZE / 2;
+    draw_sprite_ext(sprite_index, image_index, draw_x, draw_y, spawn_scale, spawn_scale, 0, c_white, 1);
 }
 else
 {

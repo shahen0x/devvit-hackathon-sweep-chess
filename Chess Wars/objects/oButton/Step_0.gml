@@ -44,6 +44,7 @@ if (highlight_mode && mouse_check_button_pressed(mb_left))
             if (is_knight && has_pawn && pawn_at_cell != noone)
             {
                 show_debug_message("Knight spawned on pawn - pawn eliminated!");
+                audio_play_sound(sndKill, 1, false);
                 instance_destroy(pawn_at_cell);
             }
             
@@ -65,6 +66,12 @@ if (highlight_mode && mouse_check_button_pressed(mb_left))
             
             // Notify oBoard that a piece was created at this square
             oBoard.piece_positions[cell_x][cell_y] = 1;
+            
+            // Count placing a piece as a move
+            oBoard.total_moves++;
+            
+            // Play spawn sound
+            audio_play_sound(sndSpawn, 1, false);
             
             show_debug_message(object_get_name(piece_type) + " spawned at cell: " + string(cell_x) + ", " + string(cell_y));
             

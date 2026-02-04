@@ -23,7 +23,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./src/*"
+        "./*"
       ],
       "@shared/*": [
         "../shared/*"
@@ -35,8 +35,8 @@
     "**/*",
     "**/*.json",
     "vite.config.ts",
-    "src/**/*.tsx",
-    "src/**/*.ts"
+    "**/*.tsx",
+    "**/*.ts"
   ],
   "exclude": [
     "**/*.test.ts"

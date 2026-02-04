@@ -39,3 +39,8 @@ piece_name = "Piece";
 // Whether this piece captures during movement or only at destination
 // (true for most pieces, false for Knight)
 capture_during_move = true;
+
+// Spawn animation variables
+spawn_scale = 0;          // Current scale (starts at 0)
+spawn_animating = true;   // Whether spawn animation is playing
+spawn_speed = 0.15;       // How fast to animate (higher = faster)
