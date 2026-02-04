@@ -40,7 +40,7 @@ export default function ChessboardPreview() {
 	}, [board]);
 
 	return (
-		<div style={{ width: '250px' }}>
+		<div style={{ width: '230px' }}>
 			<Chessboard
 				options={{
 					position: boardPosition,
