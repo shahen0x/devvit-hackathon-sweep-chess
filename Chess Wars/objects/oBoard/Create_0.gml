@@ -12,17 +12,17 @@ function debug_log(msg) {
 	}
 }
 
-debug_log("=== Game Starting ===");
+//debug_log("=== Game Starting ===");
 //debug_log("Mobile: " + string(global.is_mobile));
 //debug_log("OS: " + string(os_type));
 
 // Log os_get_info keys for debugging
 var _info = os_get_info();
 var _keys = ds_map_keys_to_array(_info);
-debug_log("os_info keys: " + string(array_length(_keys)));
-for (var _k = 0; _k < min(5, array_length(_keys)); _k++) {
-	debug_log("  " + string(_keys[_k]));
-}
+//debug_log("os_info keys: " + string(array_length(_keys)));
+//for (var _k = 0; _k < min(5, array_length(_keys)); _k++) {
+//	debug_log("  " + string(_keys[_k]));
+//}
 ds_map_destroy(_info);
 
 board = array_create(BOARD_SIZE);
@@ -74,114 +74,122 @@ for (var i = 0; i < BOARD_SIZE; i++)
     }
 }
 
-// Spawn random pawns (COMMENTED OUT - now using server data)
-/*
-var num_pawns = 16; // Change this number to spawn more/fewer pawns
-var occupied_cells = ds_map_create(); // Track occupied cells
-occupied_cells[? "0,0"] = true; // Queen's position
-occupied_cells[? "1,0"] = true; // Rook's position
-occupied_cells[? "2,0"] = true; // Bishop's position
-occupied_cells[? "3,0"] = true; // Knight's position
 
-for (var i = 0; i < num_pawns; i++)
-{
-    var attempts = 0;
-    var found_spot = false;
-    var spawn_x, spawn_y;
-    
-    // Try to find an empty cell (max 100 attempts)
-    while (attempts < 100 && !found_spot)
-    {
-        spawn_x = irandom(BOARD_SIZE - 1);
-        spawn_y = irandom(BOARD_SIZE - 1);
-        var key = string(spawn_x) + "," + string(spawn_y);
-        
-        if (!ds_map_exists(occupied_cells, key))
-        {
-            found_spot = true;
-            occupied_cells[? key] = true;
-        }
-        attempts++;
-    }
-    
-    if (found_spot)
-    {
-        var new_pawn = instance_create_layer(
-            board_offset_x + spawn_x * CELL_SIZE,
-            board_offset_y + spawn_y * CELL_SIZE,
-            "Pieces",
-            oPawn
-        );
-        
-        new_pawn.cell_x = spawn_x;
-        new_pawn.cell_y = spawn_y;
-        new_pawn.board = id;
-        new_pawn.px = board_offset_x + spawn_x * CELL_SIZE;
-        new_pawn.py = board_offset_y + spawn_y * CELL_SIZE;
-        show_debug_message("Pawn " + string(i) + " spawned at: " + string(spawn_x) + "," + string(spawn_y));
-    }
-}
+// Check if this is a Reddit build or test build
+if (is_reddit_build()) {
+	// REDDIT BUILD: Fetch board data from server
+	debug_log("Reddit build detected - Fetching board data...");
+	debug_log("URL: " + reddit_get_base_url());
+	debug_log("Token: " + reddit_get_token());
 
-ds_map_destroy(occupied_cells);
-*/
-
-// Fetch board data from server
-debug_log("Fetching board data...");
-debug_log("URL: " + reddit_get_base_url());
-debug_log("Token: " + reddit_get_token());
-
-api_get_board_data(function(_http_status, _ok, _result, _payload) {
-	debug_log("=== Response ===");
-	debug_log("HTTP: " + string(_http_status ?? "undef"));
-	debug_log("OK: " + string(_ok ?? "undef"));
-	debug_log("Len: " + string(string_length(_result ?? "")));
-	
-	// Try to parse the result as JSON
-	if (_ok && !is_undefined(_result) && _result != "") {
-		try {
-			var _data = json_parse(_result);
-			debug_log("JSON parsed OK");
-			
-			// Spawn pawns from server board data
-			// board[x][y] where board[x] is the column array, y is the row index
-			// board[x][y] === 1 means there's a pawn at that position
-			if (variable_struct_exists(_data, "board") && is_array(_data.board)) {
-				var _board = _data.board;
-				var _board_ref = oBoard.id; // Store reference to oBoard
+	api_get_board_data(function(_http_status, _ok, _result, _payload) {
+		debug_log("=== Response ===");
+		debug_log("HTTP: " + string(_http_status ?? "undef"));
+		debug_log("OK: " + string(_ok ?? "undef"));
+		debug_log("Len: " + string(string_length(_result ?? "")));
+		
+		// Try to parse the result as JSON
+		if (_ok && !is_undefined(_result) && _result != "") {
+			try {
+				var _data = json_parse(_result);
+				debug_log("JSON parsed OK");
 				
-				for (var _x = 0; _x < array_length(_board); _x++) {
-					if (is_array(_board[_x])) {
-						for (var _y = 0; _y < array_length(_board[_x]); _y++) {
-							if (_board[_x][_y] == 1) {
-								// Spawn a pawn at this position
-							// Invert y: board y=0 should be at bottom (screen y=7), y=7 at top (screen y=0)
-							var _screen_y = 7 - _y;
-							var new_pawn = instance_create_layer(
-								_board_ref.board_offset_x + _x * CELL_SIZE,
-								_board_ref.board_offset_y + _screen_y * CELL_SIZE,
-								"Pieces",
-								oPawn
-							);
-							
-							new_pawn.cell_x = _x;
-							new_pawn.cell_y = _screen_y;
-							new_pawn.board = _board_ref;
-							new_pawn.px = _board_ref.board_offset_x + _x * CELL_SIZE;
-							new_pawn.py = _board_ref.board_offset_y + _screen_y * CELL_SIZE;
-							debug_log("Pawn at: " + string(_x) + "," + string(_screen_y));
+				// Spawn pawns from server board data
+				// board[x][y] where board[x] is the column array, y is the row index
+				// board[x][y] === 1 means there's a pawn at that position
+				if (variable_struct_exists(_data, "board") && is_array(_data.board)) {
+					var _board = _data.board;
+					var _board_ref = oBoard.id; // Store reference to oBoard
+					
+					for (var _x = 0; _x < array_length(_board); _x++) {
+						if (is_array(_board[_x])) {
+							for (var _y = 0; _y < array_length(_board[_x]); _y++) {
+								if (_board[_x][_y] == 1) {
+									// Spawn a pawn at this position
+								// Invert y: board y=0 should be at bottom (screen y=7), y=7 at top (screen y=0)
+								var _screen_y = 7 - _y;
+								var new_pawn = instance_create_layer(
+									_board_ref.board_offset_x + _x * CELL_SIZE,
+									_board_ref.board_offset_y + _screen_y * CELL_SIZE,
+									"Pieces",
+									oPawn
+								);
+								
+								new_pawn.cell_x = _x;
+								new_pawn.cell_y = _screen_y;
+								new_pawn.board = _board_ref;
+								new_pawn.px = _board_ref.board_offset_x + _x * CELL_SIZE;
+								new_pawn.py = _board_ref.board_offset_y + _screen_y * CELL_SIZE;
+								//debug_log("Pawn at: " + string(_x) + "," + string(_screen_y));
+								}
 							}
 						}
 					}
 				}
+				// Mark board data as loaded after processing
+				_board_ref.board_data_loaded = true;
+				debug_log("Board loaded!");
+			} catch(_ex) {
+				debug_log("JSON Error: " + string(_ex));
 			}
-			// Mark board data as loaded after processing
-			_board_ref.board_data_loaded = true;
-			debug_log("Board loaded!");
-		} catch(_ex) {
-			debug_log("JSON Error: " + string(_ex));
+		} else {
+			debug_log("Fetch failed or empty");
+			debug_log("_ok=" + string(_ok));
 		}
-	} else {
-		debug_log("Fetch failed or empty");
-		debug_log("_ok=" + string(_ok));
+	});
+} else {
+	// TEST BUILD: Spawn random pawns locally
+	debug_log("Test build detected - Spawning random pawns...");
+	
+	var num_pawns = 16; // Change this number to spawn more/fewer pawns
+	var occupied_cells = ds_map_create(); // Track occupied cells
+	occupied_cells[? "0,0"] = true; // Queen's position
+	occupied_cells[? "1,0"] = true; // Rook's position
+	occupied_cells[? "2,0"] = true; // Bishop's position
+	occupied_cells[? "3,0"] = true; // Knight's position
+
+	for (var i = 0; i < num_pawns; i++)
+	{
+		var attempts = 0;
+		var found_spot = false;
+		var spawn_x, spawn_y;
+		
+		// Try to find an empty cell (max 100 attempts)
+		while (attempts < 100 && !found_spot)
+		{
+			spawn_x = irandom(BOARD_SIZE - 1);
+			spawn_y = irandom(BOARD_SIZE - 1);
+			var key = string(spawn_x) + "," + string(spawn_y);
+			
+			if (!ds_map_exists(occupied_cells, key))
+			{
+				found_spot = true;
+				occupied_cells[? key] = true;
+			}
+			attempts++;
+		}
+		
+		if (found_spot)
+		{
+			var new_pawn = instance_create_layer(
+				board_offset_x + spawn_x * CELL_SIZE,
+				board_offset_y + spawn_y * CELL_SIZE,
+				"Pieces",
+				oPawn
+			);
+			
+			new_pawn.cell_x = spawn_x;
+			new_pawn.cell_y = spawn_y;
+			new_pawn.board = id;
+			new_pawn.px = board_offset_x + spawn_x * CELL_SIZE;
+			new_pawn.py = board_offset_y + spawn_y * CELL_SIZE;
+			//debug_log("Pawn " + string(i) + " spawned at: " + string(spawn_x) + "," + string(spawn_y));
+		}
 	}
-});
+	
+	ds_map_destroy(occupied_cells);
+	
+	// Mark board as loaded immediately for test build
+	board_data_loaded = true;
+	debug_log("Test board loaded!");
+}
