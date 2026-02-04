@@ -16,6 +16,11 @@ restart_button_y = room_height / 2 + 60;
 restart_button_w = 120;
 restart_button_h = 40;
 
+// Score submission state
+score_submitted = false;
+score_submission_status = "";  // "success", "failed", or ""
+restart_button_enabled = false;
+
 // Initialize random seed based on today's date
 //var seed = current_year * 10000 + current_month * 100 + current_day;
 //random_set_seed(seed);
