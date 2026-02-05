@@ -17,18 +17,23 @@ export default function Splash({ onShowLeaderboard }: SplashProps) {
 	};
 
 	return (
-		<div className="relative h-screen bg-background pt-6 flex flex-col justify-between items-center gap-4">
+		<div className="relative h-screen bg-background pt-6 flex flex-col justify-between items-center gap-3">
 			{/* Header */}
-			<header className="px-4 space-y-2 text-center">
-				<div className="text-xs font-bold font-title text-primary">Hey {username}!</div>
-				<h1 className="text-xl font-bold font-title leading-7">
+			<header className="px-4 space-y-1 text-center">
+				<h1 className="text-xl font-bold font-title leading-6">
 					Can you beat this in fewer moves?
 				</h1>
+				{/* <div className="text-xs font-bold font-title text-primary">Hey {username}!</div> */}
+				<div className="text-xs font-medium text-primary">
+					Best: 7 moves by u/NoGoodJeans
+				</div>
 			</header>
 
 			{/* Content */}
 			<div className="flex flex-col items-center gap-2 px-4">
-				<ChessboardPreview />
+				<div style={{ width: '250px' }}>
+					<ChessboardPreview />
+				</div>
 
 				<div className="mt-1 mb-2 flex gap-1 opacity-40 animate-pulse">
 					<ArrowUp size={16} />

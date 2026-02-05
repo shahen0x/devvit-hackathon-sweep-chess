@@ -40,20 +40,18 @@ export default function ChessboardPreview() {
 	}, [board]);
 
 	return (
-		<div style={{ width: '230px' }}>
-			<Chessboard
-				options={{
-					position: boardPosition,
-					allowDragging: false,
-					boardStyle: {
-						border: '1px solid #BFA280',
-					},
-					lightSquareStyle: { backgroundColor: '#EDD6BB' },
-					darkSquareStyle: { backgroundColor: '#D9BE9E' },
-					pieces: customPieces,
-					showNotation: false,
-				}}
-			/>
-		</div>
+		<Chessboard
+			options={{
+				position: boardPosition,
+				allowDragging: false,
+				boardStyle: {
+					border: '1px solid #D9BE9E',
+				},
+				lightSquareStyle: { backgroundColor: '#EDD6BB' },
+				darkSquareStyle: { backgroundColor: '#D9BE9E' },
+				pieces: customPieces,
+				showNotation: false,
+			}}
+		/>
 	);
 }
