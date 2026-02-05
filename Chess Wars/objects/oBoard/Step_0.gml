@@ -14,48 +14,6 @@ else
     cells_counter_timer = 0;
 }
 
-// Handle F5 key press to force fresh board data (only in Reddit builds and when not in game over)
-if (keyboard_check_pressed(vk_f5) && is_reddit_build() && !game_over) {
-    debug_log("F5 pressed - Forcing fresh board data fetch...");
-    
-    // Destroy all existing pawns
-    with (oPawn) {
-        instance_destroy();
-    }
-    
-    // Reset board state
-    board_data_loaded = false;
-    
-    // Force fresh data fetch
-    api_get_fresh_board_data(function(_http_status, _ok, _result, _payload) {
-        debug_log("=== Fresh Data Response ===");
-        debug_log("HTTP: " + string(_http_status ?? "undef"));
-        debug_log("OK: " + string(_ok ?? "undef"));
-        debug_log("Len: " + string(string_length(_result ?? "")));
-        
-        if (_ok && !is_undefined(_result) && _result != "") {
-            try {
-                var _data = json_parse(_result);
-                debug_log("Fresh JSON parsed OK");
-                
-                // Cache the new board data
-                cache_board_data(_data);
-                
-                // Spawn pawns from fresh server board data
-                spawn_pawns_from_data(_data);
-                
-                // Mark board data as loaded
-                oBoard.board_data_loaded = true;
-                debug_log("Fresh board loaded!");
-            } catch(_ex) {
-                debug_log("Fresh JSON Error: " + string(_ex));
-            }
-        } else {
-            debug_log("Fresh fetch failed or empty");
-        }
-    });
-}
-
 // Check for game over: all pawns dead (only check when no pieces are moving)
 var any_piece_moving = false;
 with (oPiece)
@@ -114,19 +72,6 @@ if (!any_piece_moving && board_data_loaded)
             score_submission_status = "success";
             restart_button_enabled = true;
         }
-    }
-}
-
-// Handle restart button click during game over
-if (game_over && restart_button_enabled && mouse_check_button_pressed(mb_left))
-{
-    var mx = mouse_x;
-    var my = mouse_y;
-    
-    if (point_in_rectangle(mx, my, restart_button_x, restart_button_y, 
-                          restart_button_x + restart_button_w, restart_button_y + restart_button_h))
-    {
-        room_restart();
     }
 }
 

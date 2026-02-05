@@ -4,7 +4,7 @@
 if (!board.game_over) {
     exit;
 }
-show_debug_message("HELLO")
+
 // Disable layers
 layer_set_visible("UI", false);
 layer_set_visible("Pieces", false);
