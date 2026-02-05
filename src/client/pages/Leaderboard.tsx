@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 interface LeaderboardProps {
 	onBack: () => void;
@@ -21,11 +22,16 @@ export default function Leaderboard({ onBack }: LeaderboardProps) {
 	});
 
 	return (
-		<div className="relative h-screen bg-background pt-6 flex flex-col items-center gap-4 px-4">
+		<div className="relative h-screen bg-background pt-4 gap-4 px-4">
 			{/* Header */}
-			<header className="space-y-2 text-center">
-				<h1 className="text-2xl font-bold font-title leading-7">Leaderboard</h1>
-				<p className="text-sm text-muted-foreground">Top players by fewest moves</p>
+			<header className="mb-6 flex items-center gap-4">
+				<Button onClick={onBack} variant="outline" size={'icon'}>
+					<ArrowLeft />
+				</Button>
+				<div>
+					<h1 className="h-6 text-xl font-bold font-title">Leaderboard</h1>
+					<p className="text-xs text-muted-foreground">Top players by fewest moves</p>
+				</div>
 			</header>
 
 			{/* Content */}
@@ -71,13 +77,6 @@ export default function Leaderboard({ onBack }: LeaderboardProps) {
 					</div>
 				)}
 			</div>
-
-			{/* Footer */}
-			<footer className="w-full py-4 border-t">
-				<Button variant="outline" className="w-full" onClick={onBack}>
-					Back to Game
-				</Button>
-			</footer>
 		</div>
 	);
 }
