@@ -1,6 +1,6 @@
 var is_mobile = display_get_height() > display_get_width();
 
-if (!is_mobile) {
+if (is_mobile) {
     // Mobile: Keep default size (750x1168 - set in room properties)
     show_debug_message("Mobile detected - Using default room size 750x1168");
 } else {

@@ -55,6 +55,7 @@
     {"id":{"name":"sKnight","path":"sprites/sKnight/sKnight.yy",},},
     {"id":{"name":"sPawn","path":"sprites/sPawn/sPawn.yy",},},
     {"id":{"name":"sQueen","path":"sprites/sQueen/sQueen.yy",},},
+    {"id":{"name":"sRestart","path":"sprites/sRestart/sRestart.yy",},},
     {"id":{"name":"sRook","path":"sprites/sRook/sRook.yy",},},
   ],
   "resourceType":"GMProject",

@@ -4,8 +4,9 @@
 if (game_over)
 {
     // Semi-transparent black overlay
-    draw_set_alpha(0.7);
-    draw_set_color(c_black);
+    //draw_set_alpha(0.7);
+    //draw_set_color(c_black);
+	draw_set_color(#EDD6BB);
     draw_rectangle(0, 0, room_width, room_height, false);
     draw_set_alpha(1.0);
     
@@ -40,26 +41,17 @@ if (game_over)
     // Restart button
     var mx = mouse_x;
     var my = mouse_y;
-    var hovering = restart_button_enabled && point_in_rectangle(mx, my, restart_button_x, restart_button_y,
-                                      restart_button_x + restart_button_w, restart_button_y + restart_button_h);
     
-    // Button background - greyed out if not enabled
-    if (!restart_button_enabled) {
-        draw_set_color(c_gray);
-    } else {
-        draw_set_color(hovering ? c_black : c_dkgray);
-    }
-    draw_rectangle(restart_button_x, restart_button_y, 
-                  restart_button_x + restart_button_w, restart_button_y + restart_button_h, false);
+    // Draw restart button sprite (2x smaller)
+    var button_alpha = restart_button_enabled ? 1.0 : 0.5;  // Dim when disabled
+    var button_scale = 0.5;  // 2x smaller
     
-    // Button border
-    draw_set_color(restart_button_enabled ? c_white : c_dkgray);
-    draw_rectangle(restart_button_x, restart_button_y, 
-                  restart_button_x + restart_button_w, restart_button_y + restart_button_h, true);
-    
-    // Button text
-    draw_set_color(restart_button_enabled ? c_white : c_dkgray);
-    draw_text(center_x, restart_button_y + restart_button_h / 2, "RESTART");
+    draw_set_alpha(button_alpha);
+    draw_sprite_ext(sRestart, 0, 
+                    restart_button_x + restart_button_w / 2,  // Center X
+                    restart_button_y + restart_button_h / 2,  // Center Y
+                    button_scale, button_scale, 0, c_white, button_alpha);
+    draw_set_alpha(1.0);
     
     // Reset alignment
     draw_set_halign(fa_left);
