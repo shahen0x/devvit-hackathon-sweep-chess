@@ -1,13 +1,13 @@
 // Draw valid move highlights if selected
 if (is_selected && array_length(valid_moves) > 0)
 {
-    draw_set_alpha(0.5);
+    draw_set_alpha(VALID_MOVE_CIRCLE_ALPHA);
     
     for (var i = 0; i < array_length(valid_moves); i++)
     {
         var move = valid_moves[i];
-        var hx = board.board_offset_x + move[0] * CELL_SIZE;
-        var hy = board.board_offset_y + move[1] * CELL_SIZE;
+        var cx = board.board_offset_x + move[0] * CELL_SIZE + CELL_SIZE / 2;
+        var cy = board.board_offset_y + move[1] * CELL_SIZE + CELL_SIZE / 2;
         
         // Check if there's a pawn at this cell
         var has_pawn = false;
@@ -21,8 +21,8 @@ if (is_selected && array_length(valid_moves) > 0)
         }
         
         // Red for cells with pawns, green for empty
-        draw_set_color(has_pawn ? c_red : c_lime);
-        draw_rectangle(hx, hy, hx + CELL_SIZE, hy + CELL_SIZE, false);
+        draw_set_color(has_pawn ? c_red : c_white);
+        draw_circle(cx, cy, VALID_MOVE_CIRCLE_RADIUS, false);
     }
     
     draw_set_alpha(1.0);

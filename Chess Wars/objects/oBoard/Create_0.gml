@@ -133,7 +133,7 @@ if (is_reddit_build()) {
 	// TEST BUILD: Spawn random pawns locally
 	debug_log("Test build detected - Spawning random pawns...");
 	
-	var num_pawns = 1; // Change this number to spawn more/fewer pawns
+	var num_pawns = 20; // Change this number to spawn more/fewer pawns
 	var occupied_cells = ds_map_create(); // Track occupied cells
 	occupied_cells[? "0,0"] = true; // Queen's position
 	occupied_cells[? "1,0"] = true; // Rook's position

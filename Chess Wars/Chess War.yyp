@@ -61,6 +61,7 @@
     {"id":{"name":"sCell","path":"sprites/sCell/sCell.yy",},},
     {"id":{"name":"sKnight","path":"sprites/sKnight/sKnight.yy",},},
     {"id":{"name":"sPawn","path":"sprites/sPawn/sPawn.yy",},},
+    {"id":{"name":"sPawnDanger","path":"sprites/sPawnDanger/sPawnDanger.yy",},},
     {"id":{"name":"sQueen","path":"sprites/sQueen/sQueen.yy",},},
     {"id":{"name":"sRestart","path":"sprites/sRestart/sRestart.yy",},},
     {"id":{"name":"sRestartIcon","path":"sprites/sRestartIcon/sRestartIcon.yy",},},

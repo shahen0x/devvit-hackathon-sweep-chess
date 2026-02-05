@@ -3,8 +3,7 @@ if (sprite_index != -1)
 {
     draw_set_color(c_white);  // Ensure no color tinting is applied to sprite
     draw_set_alpha(1);
-    // draw_sprite(sprite_index, image_index, px, py);
-    // Draw 144x144 sprite stretched to fit 64x64 cell (no quality loss - GPU handles it)
+    // Draw 144x144 sprite stretched to fit CELL_SIZE
     draw_sprite_stretched(sprite_index, image_index, px, py, CELL_SIZE, CELL_SIZE);
 }
 else
