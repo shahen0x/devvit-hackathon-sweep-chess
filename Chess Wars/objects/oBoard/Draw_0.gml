@@ -37,5 +37,5 @@ draw_set_font(arial_24);
 draw_set_color(c_black);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
-draw_text(32, 32, "Moves: " + string(total_moves));
-draw_text(32, 32 + 45, "Distance: " + string(cells_travelled_display));
+draw_text(global.ui_moves_x, global.ui_moves_y, "Moves: " + string(total_moves));
+draw_text(global.ui_distance_x, global.ui_distance_y, "Distance: " + string(cells_travelled_display));

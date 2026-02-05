@@ -2,6 +2,9 @@ var is_mobile = display_get_height() > display_get_width();
 
 //is_mobile = !is_mobile
 
+global.is_mobile = is_mobile
+
+
 if (is_mobile) {
     // Mobile: Keep default size (750x1168 - set in room properties)
     show_debug_message("Mobile detected - Using default room size 750x1168");
@@ -41,5 +44,14 @@ if (is_mobile) {
 }
 
 // Board positioning - padding settings
-global.board_left_padding = is_mobile ? 0 : -120; // Adjust to move board left/right
-global.board_top_padding = is_mobile ? 50 : 0; // Adjust this value to raise/lower the board
+global.board_left_padding = is_mobile ? 0 : 0;
+global.board_top_padding = is_mobile ? 50 : 0;
+
+global.ui_moves_x = is_mobile ?  32 : 14;
+global.ui_moves_y = is_mobile ?  32 : 14;
+global.ui_distance_x = is_mobile ?  32 : 14 + 200;
+global.ui_distance_y = is_mobile ?  32 + 45 : 14;
+
+
+
+
