@@ -74,7 +74,7 @@ export default function Splash({ onShowLeaderboard }: SplashProps) {
 
 			{/* Footer */}
 			<footer className="w-full p-2 pl-4 border-t flex justify-between items-center">
-				<p className="flex items-center gap-1 text-xs font-medium text-primary">
+				<p className="flex items-center gap-1 text-xs font-bold text-primary">
 					<Users size={14} className="-mt-0.5" /> 500 Sweepers
 				</p>
 
