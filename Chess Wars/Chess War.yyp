@@ -66,6 +66,7 @@
     {"id":{"name":"sRestart","path":"sprites/sRestart/sRestart.yy",},},
     {"id":{"name":"sRestartIcon","path":"sprites/sRestartIcon/sRestartIcon.yy",},},
     {"id":{"name":"sRook","path":"sprites/sRook/sRook.yy",},},
+    {"id":{"name":"sSpawnPoint","path":"sprites/sSpawnPoint/sSpawnPoint.yy",},},
     {"id":{"name":"sTextWin","path":"sprites/sTextWin/sTextWin.yy",},},
     {"id":{"name":"sVolumeOff","path":"sprites/sVolumeOff/sVolumeOff.yy",},},
     {"id":{"name":"sVolumeOn","path":"sprites/sVolumeOn/sVolumeOn.yy",},},

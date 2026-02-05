@@ -62,12 +62,10 @@ if (any_highlight_mode)
                 
                 // If no pawn -> draw white circle, else draw sPawnDanger sprite
                 if (!has_pawn) {
-                    // Draw black border first
-                    draw_set_color(c_black);
-                    draw_circle(cx, cy, 10, false);
-                    // Draw white filled circle
-                    draw_set_color(c_white);
-                    draw_circle(cx, cy, 8, false);
+                    var sprite_size = CELL_SIZE / 3.8;
+                    var offset_x = (CELL_SIZE - sprite_size) / 2;
+                    var offset_y = (CELL_SIZE - sprite_size) / 2;
+                    draw_sprite_stretched(sSpawnPoint, 0, cell_x_pos + offset_x, cell_y_pos + offset_y, sprite_size, sprite_size);
                 } else {
 					draw_set_alpha(1.0)
                     draw_sprite_stretched(sPawnDanger, 0, cell_x_pos, cell_y_pos, CELL_SIZE, CELL_SIZE);
