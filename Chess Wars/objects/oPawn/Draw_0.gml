@@ -2,9 +2,10 @@
 if (sprite_index != -1)
 {
     draw_set_color(c_white);  // Ensure no color tinting is applied to sprite
-    draw_set_alpha(1);
+    draw_set_alpha(image_alpha);  // Use image_alpha instead of hardcoded 1
     // Draw 144x144 sprite stretched to fit CELL_SIZE
     draw_sprite_stretched(sprite_index, image_index, px, py, CELL_SIZE, CELL_SIZE);
+    draw_set_alpha(1);  // Reset for other drawing
 }
 else
 {

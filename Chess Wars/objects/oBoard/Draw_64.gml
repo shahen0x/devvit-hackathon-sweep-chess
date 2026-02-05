@@ -13,18 +13,31 @@ with (oButton)
     }
 }
 
+// Reset all pawn alphas to 1.0 first
+with (oPawn)
+{
+    image_alpha = 1.0;
+}
+
 // Draw highlight overlay for valid spawn cells
 if (any_highlight_mode)
 {
     var is_knight_selected = (highlight_piece_type == oKnight);
     
+    // Set all pawns to a lower alpha when in highlight mode (for all pieces)
+    with (oPawn)
+    {
+        image_alpha = 0.3;
+    }
+    
+    draw_set_alpha(VALID_MOVE_CIRCLE_ALPHA);
     draw_set_color(c_white);
+    
     for (var hor = 0; hor < BOARD_SIZE; hor++)
     {
         for (var vert = 0; vert < BOARD_SIZE; vert++)
         {
 			draw_set_alpha(1);
-
             // Check if cell has a pawn
             var has_pawn = false;
             with (oPawn)
@@ -47,16 +60,21 @@ if (any_highlight_mode)
                 var cell_x_pos = board_offset_x + hor * CELL_SIZE;
                 var cell_y_pos = board_offset_y + vert * CELL_SIZE;
                 
-                // If no pawn -> draw circle, else draw sPawnDanger sprite
+                // If no pawn -> draw white circle, else draw sPawnDanger sprite
                 if (!has_pawn) {
+                    // Draw black border first
+                    draw_set_color(c_black);
+                    draw_circle(cx, cy, 10, false);
+                    // Draw white filled circle
+                    draw_set_color(c_white);
                     draw_circle(cx, cy, 8, false);
                 } else {
-					draw_set_alpha(1);
+					draw_set_alpha(1.0)
                     draw_sprite_stretched(sPawnDanger, 0, cell_x_pos, cell_y_pos, CELL_SIZE, CELL_SIZE);
                 }
             }
         }
     }
-	draw_set_alpha(1);
-
+    
+    draw_set_alpha(1.0);
 }
