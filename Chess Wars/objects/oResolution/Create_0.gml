@@ -1,5 +1,7 @@
 var is_mobile = display_get_height() > display_get_width();
 
+//is_mobile = !is_mobile
+
 if (is_mobile) {
     // Mobile: Keep default size (750x1168 - set in room properties)
     show_debug_message("Mobile detected - Using default room size 750x1168");
@@ -37,3 +39,7 @@ if (is_mobile) {
     
     show_debug_message("Desktop detected - Room size set to " + string(_width) + "x" + string(_height));
 }
+
+// Board positioning - padding settings
+global.board_left_padding = is_mobile ? 0 : -120; // Adjust to move board left/right
+global.board_top_padding = is_mobile ? 50 : 0; // Adjust this value to raise/lower the board

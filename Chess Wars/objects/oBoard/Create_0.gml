@@ -27,10 +27,7 @@ ds_map_destroy(_info);
 
 board = array_create(BOARD_SIZE);
 
-// Board positioning with top padding
-global.board_top_padding = 50; // Adjust this value to raise/lower the board
-
-board_offset_x = (room_width - BOARD_SIZE * CELL_SIZE) div 2;
+board_offset_x = (room_width - BOARD_SIZE * CELL_SIZE) div 2 + global.board_left_padding;
 board_offset_y = ((room_height - BOARD_SIZE * CELL_SIZE) div 2) + global.board_top_padding;
 
 // Stats tracking
