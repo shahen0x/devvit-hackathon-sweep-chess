@@ -26,8 +26,12 @@ var _keys = ds_map_keys_to_array(_info);
 ds_map_destroy(_info);
 
 board = array_create(BOARD_SIZE);
+
+// Board positioning with top padding
+global.board_top_padding = 80; // Adjust this value to raise/lower the board
+
 board_offset_x = (room_width - BOARD_SIZE * CELL_SIZE) div 2;
-board_offset_y = (room_height - BOARD_SIZE * CELL_SIZE) div 2;
+board_offset_y = ((room_height - BOARD_SIZE * CELL_SIZE) div 2) + global.board_top_padding;
 
 // Stats tracking
 total_moves = 0;        // Increments each time player chooses to move a piece
