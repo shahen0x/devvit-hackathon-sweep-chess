@@ -66,7 +66,7 @@ export default function DevBox() {
 	return (
 		<>
 			{/* Hover trigger area */}
-			<div className="fixed bottom-0 right-0 w-20 h-20 z-50 group">
+			<div className="fixed top-0 right-0 w-20 h-20 z-50 group">
 				{/* Floating button - hidden by default, appears on hover */}
 				<button
 					onClick={() => setIsOpen(!isOpen)}
@@ -79,7 +79,7 @@ export default function DevBox() {
 
 			{/* Options menu */}
 			{isOpen && (
-				<div className="fixed bottom-20 right-4 z-50 bg-background border rounded-lg shadow-xl p-4 min-w-[200px]">
+				<div className="fixed top-20 right-4 z-50 bg-background border rounded-lg shadow-xl p-4 min-w-[200px]">
 					<h3 className="text-sm font-bold mb-3 text-foreground">Dev Tools</h3>
 					<div className="flex flex-col gap-2">
 						<Button

@@ -3,7 +3,7 @@ import { context, requestExpandedMode } from '@devvit/web/client';
 import { Button } from '@/components/ui/button';
 import ChessboardPreview from '@/components/ChessboardPreview';
 import DevBox from '@/components/DevBox';
-import { ArrowUp, ChessQueen, MoveRight } from 'lucide-react';
+import { ArrowUp, BookOpenText, ChessQueen, Crown, MoveRight, Trophy, Users } from 'lucide-react';
 
 interface SplashProps {
 	onShowLeaderboard: () => void;
@@ -73,11 +73,30 @@ export default function Splash({ onShowLeaderboard }: SplashProps) {
 			</div>
 
 			{/* Footer */}
-			<footer className="w-full px-4 py-2 border-t flex justify-between items-center">
-				<p className="text-sm text-muted-foreground">Top: 10 moves</p>
-				<Button onClick={onShowLeaderboard} variant="outline" size={'sm'}>
-					Leaderboard
-				</Button>
+			<footer className="w-full p-2 pl-4 border-t flex justify-between items-center">
+				<p className="flex items-center gap-1 text-xs font-medium text-primary">
+					<Users size={14} className="-mt-0.5" /> 500 Sweepers
+				</p>
+
+				<div className="flex items-center gap-2">
+					<Button
+						onClick={onShowLeaderboard}
+						variant="outline"
+						size={'sm'}
+						className="text-[0.8rem]"
+					>
+						<BookOpenText /> Rules
+					</Button>
+
+					<Button
+						onClick={onShowLeaderboard}
+						variant="outline"
+						size={'sm'}
+						className="text-[0.8rem]"
+					>
+						<Trophy /> Leaderboard
+					</Button>
+				</div>
 			</footer>
 
 			{/* Dev Tools */}
