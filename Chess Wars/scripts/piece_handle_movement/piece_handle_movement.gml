@@ -22,8 +22,8 @@ function piece_handle_movement()
     }
     
     // Calculate target pixel position
-    var target_px = board.board_offset_x + current_target_cell_x * CELL_SIZE;
-    var target_py = board.board_offset_y + current_target_cell_y * CELL_SIZE;
+    var target_px = board.board_offset_x + current_target_cell_x * global.cell_size;
+    var target_py = board.board_offset_y + current_target_cell_y * global.cell_size;
     
     // Move towards target
     var dist = point_distance(px, py, target_px, target_py);
@@ -37,7 +37,7 @@ function piece_handle_movement()
         // Capture pawn at this position if capture_during_move is enabled
         if (capture_during_move)
         {
-            var pawn_instance = instance_position(px + CELL_SIZE / 2, py + CELL_SIZE / 2, oPawn);
+            var pawn_instance = instance_position(px + global.cell_size / 2, py + global.cell_size / 2, oPawn);
             if (pawn_instance != noone)
             {
                 show_debug_message(piece_name + " captured pawn at waypoint!");
@@ -75,7 +75,7 @@ function piece_handle_movement()
             // For pieces that don't capture during move: capture at destination only
             if (!capture_during_move)
             {
-                var pawn_instance = instance_position(px + CELL_SIZE / 2, py + CELL_SIZE / 2, oPawn);
+                var pawn_instance = instance_position(px + global.cell_size / 2, py + global.cell_size / 2, oPawn);
                 if (pawn_instance != noone)
                 {
                     show_debug_message(piece_name + " captured pawn!");
@@ -95,7 +95,7 @@ function piece_handle_movement()
         // Check for collision with pawns along the path (every frame while moving)
         if (capture_during_move)
         {
-            var pawn_instance = instance_position(px + CELL_SIZE / 2, py + CELL_SIZE / 2, oPawn);
+            var pawn_instance = instance_position(px + global.cell_size / 2, py + global.cell_size / 2, oPawn);
             if (pawn_instance != noone)
             {
                 show_debug_message(piece_name + " captured pawn!");

@@ -1,5 +1,5 @@
-var cell_x = mouse_x div CELL_SIZE;
-var cell_y = mouse_y div CELL_SIZE;
+var cell_x = mouse_x div global.cell_size;
+var cell_y = mouse_y div global.cell_size;
 
 // Make sure click is inside the board
 if (cell_x >= 0 && cell_x < BOARD_SIZE &&

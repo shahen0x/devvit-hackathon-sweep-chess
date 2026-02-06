@@ -10,6 +10,10 @@
 			},
 			"game": {
 				"entry": "index.html"
+			},
+			"creator": {
+				"entry": "creator.html",
+				"inline": true
 			}
 		}
 	},
@@ -20,16 +24,38 @@
 	"menu": {
 		"items": [
 			{
-				"label": "Create a new post",
-				"description": "chess-war",
+				"label": "📅 Post Daily Challenge",
+				"description": "Create a new daily chess puzzle challenge",
 				"location": "subreddit",
 				"forUserType": "moderator",
-				"endpoint": "/internal/menu/post-create"
+				"endpoint": "/internal/menu/daily-challenge-create"
+			},
+			{
+				"label": "🎨 Post Level Creator",
+				"description": "Create a post where users can build custom puzzles",
+				"location": "subreddit",
+				"forUserType": "moderator",
+				"endpoint": "/internal/menu/level-creator-create"
+			},
+			{
+				"label": "🔧 Reset Daily Lock (Dev)",
+				"description": "Clear the daily post lock for testing multiple posts",
+				"location": "subreddit",
+				"forUserType": "moderator",
+				"endpoint": "/internal/menu/dev-reset-daily-lock"
 			}
 		]
 	},
 	"triggers": {
 		"onAppInstall": "/internal/on-app-install"
+	},
+	"scheduler": {
+		"tasks": {
+			"post-daily-challenge": {
+				"cron": "0 0 * * *",
+				"endpoint": "/internal/scheduler/post-daily-challenge"
+			}
+		}
 	},
 	"dev": {
 		"subreddit": "chess_war_dev"

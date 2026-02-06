@@ -13,12 +13,12 @@ if (highlight_mode && mouse_check_button_pressed(mb_left))
     var local_y = my - oBoard.board_offset_y;
 
     // Bounds check on local coordinates first (must be within board area)
-    if (local_x >= 0 && local_x < BOARD_SIZE * CELL_SIZE &&
-        local_y >= 0 && local_y < BOARD_SIZE * CELL_SIZE)
+    if (local_x >= 0 && local_x < BOARD_SIZE * global.cell_size &&
+        local_y >= 0 && local_y < BOARD_SIZE * global.cell_size)
     {
         // Convert to cell coordinates
-        var cell_x = local_x div CELL_SIZE;
-        var cell_y = local_y div CELL_SIZE;
+        var cell_x = local_x div global.cell_size;
+        var cell_y = local_y div global.cell_size;
         // Check if there's a pawn at this cell
         var has_pawn = false;
         var pawn_at_cell = noone;
@@ -50,8 +50,8 @@ if (highlight_mode && mouse_check_button_pressed(mb_left))
             
             // Spawn piece at the selected cell
             var new_piece = instance_create_layer(
-                oBoard.board_offset_x + cell_x * CELL_SIZE,
-                oBoard.board_offset_y + cell_y * CELL_SIZE,
+                oBoard.board_offset_x + cell_x * global.cell_size,
+                oBoard.board_offset_y + cell_y * global.cell_size,
                 "Pieces",
                 piece_type
             );
@@ -59,16 +59,13 @@ if (highlight_mode && mouse_check_button_pressed(mb_left))
             new_piece.cell_x = cell_x;
             new_piece.cell_y = cell_y;
             new_piece.board = oBoard.id;
-            new_piece.px = oBoard.board_offset_x + cell_x * CELL_SIZE;
-            new_piece.py = oBoard.board_offset_y + cell_y * CELL_SIZE;
+            new_piece.px = oBoard.board_offset_x + cell_x * global.cell_size;
+            new_piece.py = oBoard.board_offset_y + cell_y * global.cell_size;
             new_piece.target_cell_x = cell_x;
             new_piece.target_cell_y = cell_y;
             
             // Notify oBoard that a piece was created at this square
             oBoard.piece_positions[cell_x][cell_y] = 1;
-            
-            // Count placing a piece as a move
-            oBoard.total_moves++;
             
             // Play spawn sound
             audio_play_sound(sndSpawn, 1, false);

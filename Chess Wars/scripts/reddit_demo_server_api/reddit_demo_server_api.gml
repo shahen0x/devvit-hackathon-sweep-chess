@@ -14,10 +14,16 @@ function api_register_request(_req, _callback) {
 /// For more details check the server implementation under the output folder:
 /// <output>/<project_name>/src/server/index.ts
 /// @param {Function} _callback The callback that you want to be executed upon task completion.
-function api_get_board_data(_callback) {
+/// @param {Bool} _force_fresh Optional parameter to force fresh data (bypasses cache). Default: false
+function api_get_board_data(_callback, _force_fresh = false) {
 	
 	// Build request url
 	var _url = reddit_get_base_url() + "/api/board-data";
+	
+	// Add cache-busting parameter if forcing fresh data
+	if (_force_fresh) {
+		_url += "?t=" + string(current_time);
+	}
 	
 	// Build request headers
 	var _headers = ds_map_create();
@@ -27,6 +33,12 @@ function api_get_board_data(_callback) {
 	var _token = reddit_get_token();
 	if (_token != "noone" && _token != "") {
 		ds_map_add(_headers, "Authorization", $"Bearer {_token}");
+	}
+	
+	// Add cache control headers if forcing fresh data
+	if (_force_fresh) {
+		ds_map_add(_headers, "Cache-Control", "no-cache, no-store, must-revalidate");
+		ds_map_add(_headers, "Pragma", "no-cache");
 	}
 	
 	// Make request
@@ -77,4 +89,14 @@ function api_submit_score(_totalMoves, _cellsTravelled, _callback) {
 	if (is_callable(_callback)) api_register_request(_req, _callback);
 	
 	return _req;
+}
+
+/// @desc This function forces a fresh fetch of board data, clearing any cached data first.
+/// @param {Function} _callback The callback that you want to be executed upon task completion.
+function api_get_fresh_board_data(_callback) {
+	// Clear the cache first
+	clear_board_cache();
+	
+	// Then fetch fresh data
+	return api_get_board_data(_callback, true);
 }

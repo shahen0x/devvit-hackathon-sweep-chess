@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft, LoaderCircle } from 'lucide-react';
 
 interface LeaderboardProps {
 	onBack: () => void;
@@ -21,63 +22,85 @@ export default function Leaderboard({ onBack }: LeaderboardProps) {
 	});
 
 	return (
-		<div className="relative h-screen bg-background pt-6 flex flex-col items-center gap-4 px-4">
+		<div className="relative h-screen bg-background pt-4 gap-4 px-4">
 			{/* Header */}
-			<header className="space-y-2 text-center">
-				<h1 className="text-2xl font-bold font-title leading-7">Leaderboard</h1>
-				<p className="text-sm text-muted-foreground">Top players by fewest moves</p>
+			<header className="mb-6 flex items-center justify-center gap-4">
+				<Button onClick={onBack} variant="outline" size={'icon'}>
+					<ArrowLeft />
+				</Button>
+				<div className="sm:space-y-1">
+					<h1 className="h-6 text-xl font-bold font-title">Leaderboard</h1>
+					<p className="text-xs text-muted-foreground">Top 5 players by fewest moves</p>
+				</div>
 			</header>
 
 			{/* Content */}
-			<div className="w-full max-w-md flex-1 overflow-auto">
+			<div
+				className={`w-full h-[calc(100%-84px)] space-y-3 flex flex-col items-center ${
+					!data && 'justify-center'
+				}`}
+			>
 				{isLoading ? (
-					<div className="text-center text-muted-foreground">Loading leaderboard...</div>
+					<LoaderCircle size={24} className="animate-spin" />
 				) : error ? (
 					<div className="text-center text-destructive">Error loading leaderboard</div>
 				) : !data || data.length === 0 ? (
 					<div className="text-center text-muted-foreground">
-						No scores yet. Be the first!
+						No plays yet. Be the first!
 					</div>
 				) : (
-					<div className="space-y-2">
+					<>
 						{data.map((entry: any) => (
 							<div
 								key={entry.userId}
-								className="flex items-center justify-between p-4 bg-card rounded-lg border"
+								className="w-full flex items-center justify-between px-4 py-2 bg-secondary rounded-lg border"
 							>
 								<div className="flex items-center gap-3">
-									<span className="text-lg font-bold text-primary">
-										#{entry.rank}
-									</span>
+									<span className="text-lg font-bold">#{entry.rank}</span>
+
+									<figure className="w-8">
+										{entry.snoovatar === 'none' ? (
+											<img
+												src="/misc/snoo.png"
+												className="grayscale opacity-40"
+											/>
+										) : (
+											<img src={entry.snoovatar} />
+										)}
+									</figure>
+
 									<div>
-										<p className="font-semibold">
+										<h4 className="font-semibold">
 											{entry.username || 'Anonymous'}
-										</p>
-										<p className="text-sm text-muted-foreground">
-											{entry.totalMoves} moves
-										</p>
+										</h4>
+										<div className="text-sm sm:hidden">
+											In{' '}
+											<span className="text-primary font-medium">
+												{entry.totalMoves}{' '}
+												{entry.totalMoves === 1 ? ' move' : ' moves'}
+											</span>{' '}
+											&{' '}
+											<span className="text-primary font-medium">
+												{entry.cellsTravelled}{' '}
+												{entry.cellsTravelled === 1 ? ' cell' : ' cells'}{' '}
+											</span>
+										</div>
 									</div>
 								</div>
-								<div className="text-right">
-									<p className="text-sm text-muted-foreground">
-										{entry.cellsTravelled} cells
+
+								<div className="text-right hidden sm:block">
+									<p className="text-sm font-bold text-primary">
+										{entry.totalMoves} moves
 									</p>
-									<p className="text-xs text-muted-foreground">
-										Score: {entry.score?.toFixed(2)}
+									<p className="text-xs font-medium text-muted-foreground">
+										{entry.cellsTravelled} cells
 									</p>
 								</div>
 							</div>
 						))}
-					</div>
+					</>
 				)}
 			</div>
-
-			{/* Footer */}
-			<footer className="w-full py-4 border-t">
-				<Button variant="outline" className="w-full" onClick={onBack}>
-					Back to Game
-				</Button>
-			</footer>
 		</div>
 	);
 }

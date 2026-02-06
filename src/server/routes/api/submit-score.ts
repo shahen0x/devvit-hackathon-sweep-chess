@@ -54,7 +54,7 @@ router.post('/api/submit-score', async (req: Request, res: Response): Promise<vo
 		});
 
 		// Score calculation (higher is better - fewer moves/cells = higher score)
-		const compositeScore = (1 / (totalMoves + cellsTravelled)) * 10000;
+		const compositeScore = (1 / totalMoves) * 100000 + (1 / cellsTravelled) * 100;
 
 		// Get previous score from leaderboard
 		const previousScoreStr = await redis.zScore(leaderboardKey, userId);
