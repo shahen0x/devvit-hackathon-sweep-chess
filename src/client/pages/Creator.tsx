@@ -116,20 +116,42 @@ export default function Creator() {
 	return (
 		<div className="relative h-screen bg-background pt-6 flex flex-col gap-4 px-4 pb-4">
 			{/* Header */}
-			<header className="space-y-1 text-center">
-				<h1 className="text-xl font-bold font-title leading-6">Level Creator</h1>
-				<p className="text-xs text-muted-foreground">Design your own Sweep Chess puzzle</p>
-			</header>
-
-			{/* Pawn Counter */}
-			<div className="text-center">
-				<div className="inline-flex items-center gap-2 px-4 py-2 bg-muted rounded-lg">
-					<img src="/chess-pieces/pawn.svg" alt="pawn" className="w-5 h-5" />
-					<span className="text-sm font-bold">
-						{pawnCount} / {MAX_PAWNS}
-					</span>
+			<header className="flex justify-between">
+				{/* Pawn Counter */}
+				<div className="text-center">
+					<div className="inline-flex items-center gap-2 px-4 py-2 bg-muted rounded-lg">
+						<img src="/chess-pieces/pawn.svg" alt="pawn" className="w-5 h-5" />
+						<span className="text-sm font-bold">
+							{pawnCount} / {MAX_PAWNS}
+						</span>
+					</div>
 				</div>
-			</div>
+
+				{/* Action Buttons */}
+				<div className="flex gap-2">
+					<Button
+						onClick={handleClear}
+						variant="outline"
+						className="flex-1"
+						disabled={pawnCount === 0 || submitBoardMutation.isPending}
+					>
+						<RotateCcw /> Clear
+					</Button>
+					<Button
+						onClick={handleSubmit}
+						className="flex-1"
+						disabled={pawnCount !== MAX_PAWNS || submitBoardMutation.isPending}
+					>
+						{submitBoardMutation.isPending ? (
+							'Creating Level...'
+						) : (
+							<>
+								<Send /> Create Level
+							</>
+						)}
+					</Button>
+				</div>
+			</header>
 
 			{/* Chessboard */}
 			<div className="flex-1 flex items-center justify-center">
@@ -143,36 +165,11 @@ export default function Creator() {
 					{submitBoardMutation.isPending && (
 						<div className="absolute inset-0 bg-black/20 flex items-center justify-center">
 							<div className="bg-background px-4 py-2 rounded-lg shadow-lg">
-								<p className="text-sm font-medium">Creating puzzle...</p>
+								<p className="text-sm font-medium">Creating Level...</p>
 							</div>
 						</div>
 					)}
 				</div>
-			</div>
-
-			{/* Action Buttons */}
-			<div className="flex gap-2">
-				<Button
-					onClick={handleClear}
-					variant="outline"
-					className="flex-1"
-					disabled={pawnCount === 0 || submitBoardMutation.isPending}
-				>
-					<RotateCcw /> Clear
-				</Button>
-				<Button
-					onClick={handleSubmit}
-					className="flex-1"
-					disabled={pawnCount !== MAX_PAWNS || submitBoardMutation.isPending}
-				>
-					{submitBoardMutation.isPending ? (
-						'Creating...'
-					) : (
-						<>
-							<Send /> Create Puzzle
-						</>
-					)}
-				</Button>
 			</div>
 		</div>
 	);
