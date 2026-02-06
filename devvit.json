@@ -10,6 +10,10 @@
 			},
 			"game": {
 				"entry": "index.html"
+			},
+			"creator": {
+				"entry": "creator.html",
+				"inline": true
 			}
 		}
 	},
@@ -25,6 +29,13 @@
 				"location": "subreddit",
 				"forUserType": "moderator",
 				"endpoint": "/internal/menu/post-create"
+			},
+			{
+				"label": "Create Level Creator Post",
+				"description": "Create a post for building custom chess levels",
+				"location": "subreddit",
+				"forUserType": "moderator",
+				"endpoint": "/internal/menu/creator-create"
 			}
 		]
 	},
