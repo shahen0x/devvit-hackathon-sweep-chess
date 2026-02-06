@@ -28,14 +28,18 @@ export default function Leaderboard({ onBack }: LeaderboardProps) {
 				<Button onClick={onBack} variant="outline" size={'icon'}>
 					<ArrowLeft />
 				</Button>
-				<div>
+				<div className="sm:space-y-1">
 					<h1 className="h-6 text-xl font-bold font-title">Leaderboard</h1>
 					<p className="text-xs text-muted-foreground">Top 5 players by fewest moves</p>
 				</div>
 			</header>
 
 			{/* Content */}
-			<div className="w-full h-[calc(100%-84px)] space-y-3 flex flex-col items-center justify-center">
+			<div
+				className={`w-full h-[calc(100%-84px)] space-y-3 flex flex-col items-center ${
+					!data && 'justify-center'
+				}`}
+			>
 				{isLoading ? (
 					<LoaderCircle size={24} className="animate-spin" />
 				) : error ? (
@@ -69,7 +73,7 @@ export default function Leaderboard({ onBack }: LeaderboardProps) {
 										<h4 className="font-semibold">
 											{entry.username || 'Anonymous'}
 										</h4>
-										<div className="text-sm">
+										<div className="text-sm sm:hidden">
 											In{' '}
 											<span className="text-primary font-medium">
 												{entry.totalMoves}{' '}
@@ -78,20 +82,20 @@ export default function Leaderboard({ onBack }: LeaderboardProps) {
 											&{' '}
 											<span className="text-primary font-medium">
 												{entry.cellsTravelled}{' '}
-												{entry.cellsTravelled === 1 ? ' cell' : ' cells'}
+												{entry.cellsTravelled === 1 ? ' cell' : ' cells'}{' '}
 											</span>
 										</div>
 									</div>
 								</div>
 
-								{/* <div className="text-right">
+								<div className="text-right hidden sm:block">
 									<p className="text-sm font-bold text-primary">
 										{entry.totalMoves} moves
 									</p>
-									<p className="text-sm text-muted-foreground">
+									<p className="text-xs font-medium text-muted-foreground">
 										{entry.cellsTravelled} cells
 									</p>
-								</div> */}
+								</div>
 							</div>
 						))}
 					</>

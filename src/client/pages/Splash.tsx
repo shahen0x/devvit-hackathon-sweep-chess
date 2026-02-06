@@ -31,7 +31,7 @@ export default function Splash({ onShowLeaderboard }: SplashProps) {
 
 			{/* Content */}
 			<div className="flex flex-col items-center gap-2 px-4">
-				<div style={{ width: '250px' }}>
+				<div className="w-56 xs:w-64">
 					<ChessboardPreview />
 				</div>
 
