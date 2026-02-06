@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { context, requestExpandedMode } from '@devvit/web/client';
 import { Button } from '@/components/ui/button';
 import ChessboardPreview from '@/components/ChessboardPreview';
@@ -10,10 +10,50 @@ interface SplashProps {
 	onShowRules: () => void;
 }
 
+// API functions
+const fetchPlayerCount = async () => {
+	const response = await fetch('/api/player-count');
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+	const data = await response.json();
+	return data.playerCount;
+};
+
+const trackPlayer = async () => {
+	const response = await fetch('/api/track-player', {
+		method: 'POST',
+	});
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+	const data = await response.json();
+	return data.playerCount;
+};
+
 export default function Splash({ onShowLeaderboard, onShowRules }: SplashProps) {
-	const username = context.username ?? 'Player';
+	const queryClient = useQueryClient();
+
+	// Fetch player count
+	const { data: playerCount = 0 } = useQuery({
+		queryKey: ['playerCount'],
+		queryFn: fetchPlayerCount,
+	});
+
+	// Track player mutation
+	const trackPlayerMutation = useMutation({
+		mutationFn: trackPlayer,
+		onSuccess: (newCount) => {
+			// Update the player count in cache
+			queryClient.setQueryData(['playerCount'], newCount);
+		},
+	});
 
 	const handleStartGame = (e: React.MouseEvent<HTMLButtonElement>) => {
+		// Track the player
+		trackPlayerMutation.mutate();
+
+		// Expand to game mode
 		requestExpandedMode(e.nativeEvent, 'game');
 	};
 
@@ -76,7 +116,8 @@ export default function Splash({ onShowLeaderboard, onShowRules }: SplashProps) 
 			{/* Footer */}
 			<footer className="w-full p-2 pl-4 border-t flex justify-between items-center">
 				<p className="flex items-center gap-1 text-xs font-bold text-primary">
-					<Users size={14} className="-mt-0.5" /> 500 Sweepers
+					<Users size={14} className="-mt-0.5" /> {playerCount.toLocaleString()}{' '}
+					{playerCount === 1 ? 'Player' : 'Players'}
 				</p>
 
 				<div className="flex items-center gap-2">
