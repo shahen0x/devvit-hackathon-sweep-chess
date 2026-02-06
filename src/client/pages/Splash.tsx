@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { context, requestExpandedMode } from '@devvit/web/client';
 import { Button } from '@/components/ui/button';
 import ChessboardPreview from '@/components/ChessboardPreview';
@@ -7,12 +7,68 @@ import { ArrowUp, BookOpenText, ChessQueen, Crown, MoveRight, Trophy, Users } fr
 
 interface SplashProps {
 	onShowLeaderboard: () => void;
+	onShowRules: () => void;
 }
 
-export default function Splash({ onShowLeaderboard }: SplashProps) {
-	const username = context.username ?? 'Player';
+// API functions
+const fetchPlayerCount = async () => {
+	const response = await fetch('/api/player-count');
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+	const data = await response.json();
+	return data.playerCount;
+};
+
+const fetchTopPlayer = async () => {
+	const response = await fetch('/api/top-player');
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+	const data = await response.json();
+	return data.topPlayer;
+};
+
+const trackPlayer = async () => {
+	const response = await fetch('/api/track-player', {
+		method: 'POST',
+	});
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+	const data = await response.json();
+	return data.playerCount;
+};
+
+export default function Splash({ onShowLeaderboard, onShowRules }: SplashProps) {
+	const queryClient = useQueryClient();
+
+	// Fetch player count
+	const { data: playerCount = 0 } = useQuery({
+		queryKey: ['playerCount'],
+		queryFn: fetchPlayerCount,
+	});
+
+	// Fetch top player
+	const { data: topPlayer } = useQuery({
+		queryKey: ['topPlayer'],
+		queryFn: fetchTopPlayer,
+	});
+
+	// Track player mutation
+	const trackPlayerMutation = useMutation({
+		mutationFn: trackPlayer,
+		onSuccess: (newCount) => {
+			// Update the player count in cache
+			queryClient.setQueryData(['playerCount'], newCount);
+		},
+	});
 
 	const handleStartGame = (e: React.MouseEvent<HTMLButtonElement>) => {
+		// Track the player
+		trackPlayerMutation.mutate();
+
+		// Expand to game mode
 		requestExpandedMode(e.nativeEvent, 'game');
 	};
 
@@ -23,15 +79,21 @@ export default function Splash({ onShowLeaderboard }: SplashProps) {
 				<h1 className="text-xl font-bold font-title leading-6">
 					Can you beat this in fewer moves?
 				</h1>
-				{/* <div className="text-xs font-bold font-title text-primary">Hey {username}!</div> */}
-				<div className="text-xs font-medium text-primary">
-					Best: 7 moves by u/NoGoodJeans
-				</div>
+				{topPlayer && topPlayer.totalMoves ? (
+					<div className="text-xs font-medium text-primary">
+						Best: {topPlayer.totalMoves} {topPlayer.totalMoves === 1 ? 'move' : 'moves'}{' '}
+						by u/{topPlayer.username}
+					</div>
+				) : (
+					<div className="text-xs font-medium text-muted-foreground">
+						Be the first to complete this puzzle!
+					</div>
+				)}
 			</header>
 
 			{/* Content */}
 			<div className="flex flex-col items-center gap-2 px-4">
-				<div style={{ width: '250px' }}>
+				<div className="w-56 xs:w-64">
 					<ChessboardPreview />
 				</div>
 
@@ -75,12 +137,13 @@ export default function Splash({ onShowLeaderboard }: SplashProps) {
 			{/* Footer */}
 			<footer className="w-full p-2 pl-4 border-t flex justify-between items-center">
 				<p className="flex items-center gap-1 text-xs font-bold text-primary">
-					<Users size={14} className="-mt-0.5" /> 500 Sweepers
+					<Users size={14} className="-mt-0.5" /> {playerCount.toLocaleString()}{' '}
+					{playerCount === 1 ? 'Player' : 'Players'}
 				</p>
 
 				<div className="flex items-center gap-2">
 					<Button
-						onClick={onShowLeaderboard}
+						onClick={onShowRules}
 						variant="outline"
 						size={'sm'}
 						className="text-[0.8rem]"

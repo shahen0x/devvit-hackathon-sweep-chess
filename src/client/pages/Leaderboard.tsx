@@ -24,39 +24,41 @@ export default function Leaderboard({ onBack }: LeaderboardProps) {
 	return (
 		<div className="relative h-screen bg-background pt-4 gap-4 px-4">
 			{/* Header */}
-			<header className="mb-6 flex items-center gap-6">
+			<header className="mb-6 flex items-center justify-center gap-4">
 				<Button onClick={onBack} variant="outline" size={'icon'}>
 					<ArrowLeft />
 				</Button>
-				<div className="space-y-1">
+				<div className="sm:space-y-1">
 					<h1 className="h-6 text-xl font-bold font-title">Leaderboard</h1>
-					<p className="text-xs text-muted-foreground">Top players by fewest moves</p>
+					<p className="text-xs text-muted-foreground">Top 5 players by fewest moves</p>
 				</div>
 			</header>
 
 			{/* Content */}
-			<div className="h-[calc(100%-84px)] flex items-center justify-center">
+			<div
+				className={`w-full h-[calc(100%-84px)] space-y-3 flex flex-col items-center ${
+					!data && 'justify-center'
+				}`}
+			>
 				{isLoading ? (
 					<LoaderCircle size={24} className="animate-spin" />
 				) : error ? (
 					<div className="text-center text-destructive">Error loading leaderboard</div>
 				) : !data || data.length === 0 ? (
 					<div className="text-center text-muted-foreground">
-						No scores yet. Be the first!
+						No plays yet. Be the first!
 					</div>
 				) : (
-					<div className="space-y-2 max-w-md">
+					<>
 						{data.map((entry: any) => (
 							<div
 								key={entry.userId}
-								className="flex items-center justify-between p-4 bg-secondary rounded-lg border"
+								className="w-full flex items-center justify-between px-4 py-2 bg-secondary rounded-lg border"
 							>
 								<div className="flex items-center gap-3">
-									<span className="text-lg font-bold text-primary">
-										#{entry.rank}
-									</span>
+									<span className="text-lg font-bold">#{entry.rank}</span>
 
-									<figure className="w-10">
+									<figure className="w-8">
 										{entry.snoovatar === 'none' ? (
 											<img
 												src="/misc/snoo.png"
@@ -68,26 +70,35 @@ export default function Leaderboard({ onBack }: LeaderboardProps) {
 									</figure>
 
 									<div>
-										<p className="font-semibold">
+										<h4 className="font-semibold">
 											{entry.username || 'Anonymous'}
-										</p>
-										<p className="text-sm text-muted-foreground">
-											{entry.totalMoves} moves
-										</p>
+										</h4>
+										<div className="text-sm sm:hidden">
+											In{' '}
+											<span className="text-primary font-medium">
+												{entry.totalMoves}{' '}
+												{entry.totalMoves === 1 ? ' move' : ' moves'}
+											</span>{' '}
+											&{' '}
+											<span className="text-primary font-medium">
+												{entry.cellsTravelled}{' '}
+												{entry.cellsTravelled === 1 ? ' cell' : ' cells'}{' '}
+											</span>
+										</div>
 									</div>
 								</div>
 
-								<div className="text-right">
-									<p className="text-sm text-muted-foreground">
-										{entry.cellsTravelled} cells
+								<div className="text-right hidden sm:block">
+									<p className="text-sm font-bold text-primary">
+										{entry.totalMoves} moves
 									</p>
-									<p className="text-xs text-muted-foreground">
-										Score: {entry.score?.toFixed(2)}
+									<p className="text-xs font-medium text-muted-foreground">
+										{entry.cellsTravelled} cells
 									</p>
 								</div>
 							</div>
 						))}
-					</div>
+					</>
 				)}
 			</div>
 		</div>
