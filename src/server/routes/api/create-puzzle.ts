@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { context, reddit, redis } from '@devvit/web/server';
+import { context, reddit } from '@devvit/web/server';
 import type { CreatePuzzleRequest, CreatePuzzleResponse } from '../../../shared/types/api';
+import { createUserPuzzlePost } from '../../core/post';
 
 const router = Router();
 
@@ -35,11 +36,7 @@ function validateBoard(board: number[][]): { valid: boolean; error?: string } {
 router.post('/api/create-puzzle', async (req, res) => {
 	try {
 		const { board } = req.body as CreatePuzzleRequest;
-		const { subredditName, userId } = context;
-
-		if (!subredditName) {
-			return res.status(400).json({ error: 'Subreddit name is required' });
-		}
+		const { userId } = context;
 
 		if (!userId) {
 			return res.status(401).json({ error: 'User must be logged in' });
@@ -55,21 +52,8 @@ router.post('/api/create-puzzle', async (req, res) => {
 		const user = await reddit.getCurrentUser();
 		const username = user?.username || 'Anonymous';
 
-		// Get and increment the puzzle counter
-		const puzzleNumber = await redis.incrBy('puzzle:counter', 1);
-
-		// Create the post
-		const post = await reddit.submitCustomPost({
-			subredditName: subredditName,
-			title: `Sweep Chess - Community Puzzle #${puzzleNumber} by u/${username}`,
-			entry: 'default',
-			postData: {
-				gameId: `community-${puzzleNumber}`,
-				board: board,
-				createdBy: username,
-				createdAt: new Date().toISOString(),
-			},
-		});
+		// Create the post using the core function
+		const post = await createUserPuzzlePost(board, username);
 
 		// Construct the proper Reddit post URL
 		const cleanPostId = post.id.replace(/^t3_/, '');

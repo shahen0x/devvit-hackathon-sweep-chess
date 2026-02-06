@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react';
+import { memo } from 'react';
 
 interface CreatorBoardProps {
 	board: number[][];
@@ -12,22 +12,19 @@ const Square = memo(
 		hasPawn,
 		isLight,
 		isMaxPawns,
-		onPointerDown,
-		onPointerEnter,
+		onClick,
 	}: {
 		hasPawn: boolean;
 		isLight: boolean;
 		isMaxPawns: boolean;
-		onPointerDown: () => void;
-		onPointerEnter: () => void;
+		onClick: () => void;
 	}) => {
 		const showDot = !hasPawn && !isMaxPawns;
 
 		return (
 			<button
-				onPointerDown={onPointerDown}
-				onPointerEnter={onPointerEnter}
-				className={`aspect-square relative flex items-center justify-center cursor-pointer ${
+				onClick={onClick}
+				className={`aspect-square relative flex items-center justify-center cursor-pointer group ${
 					isLight ? 'bg-[#EDD6BB]' : 'bg-[#D9BE9E]'
 				}`}
 				style={{ touchAction: 'none' }}
@@ -41,7 +38,7 @@ const Square = memo(
 					/>
 				) : (
 					showDot && (
-						<div className="w-3 h-3 rounded-full bg-white/50 pointer-events-none" />
+						<div className="w-3 h-3 rounded-full bg-white/50 group-hover:bg-black/60 transition-colors duration-100 pointer-events-none" />
 					)
 				)}
 			</button>
@@ -52,47 +49,10 @@ const Square = memo(
 Square.displayName = 'Square';
 
 function CreatorBoard({ board, onSquareClick, isMaxPawns }: CreatorBoardProps) {
-	const [isDragging, setIsDragging] = useState(false);
-	const [dragMode, setDragMode] = useState<'place' | 'remove' | null>(null);
-
-	const handlePointerDown = useCallback(
-		(x: number, y: number) => {
-			setIsDragging(true);
-			const hasPawn = board[x]?.[y] === 1;
-			// Set drag mode based on what we're clicking
-			setDragMode(hasPawn ? 'remove' : 'place');
-			onSquareClick(x, y);
-		},
-		[board, onSquareClick]
-	);
-
-	const handlePointerEnter = useCallback(
-		(x: number, y: number) => {
-			if (!isDragging || !dragMode) return;
-
-			const hasPawn = board[x]?.[y] === 1;
-
-			// Only apply action if it matches the drag mode
-			if (dragMode === 'place' && !hasPawn) {
-				onSquareClick(x, y);
-			} else if (dragMode === 'remove' && hasPawn) {
-				onSquareClick(x, y);
-			}
-		},
-		[isDragging, dragMode, board, onSquareClick]
-	);
-
-	const handlePointerUp = useCallback(() => {
-		setIsDragging(false);
-		setDragMode(null);
-	}, []);
-
 	return (
 		<div
 			className="w-full aspect-square grid grid-cols-8 grid-rows-8 border border-[#D9BE9E]"
 			style={{ touchAction: 'none' }}
-			onPointerUp={handlePointerUp}
-			onPointerLeave={handlePointerUp}
 		>
 			{Array.from({ length: 8 }).map((_, rankIndex) => {
 				// Render from rank 8 (top) to rank 1 (bottom)
@@ -109,8 +69,7 @@ function CreatorBoard({ board, onSquareClick, isMaxPawns }: CreatorBoardProps) {
 							hasPawn={hasPawn}
 							isLight={isLight}
 							isMaxPawns={isMaxPawns}
-							onPointerDown={() => handlePointerDown(x, y)}
-							onPointerEnter={() => handlePointerEnter(x, y)}
+							onClick={() => onSquareClick(x, y)}
 						/>
 					);
 				});
