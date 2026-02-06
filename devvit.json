@@ -36,6 +36,13 @@
 				"location": "subreddit",
 				"forUserType": "moderator",
 				"endpoint": "/internal/menu/level-creator-create"
+			},
+			{
+				"label": "🔧 Reset Daily Lock (Dev)",
+				"description": "Clear the daily post lock for testing multiple posts",
+				"location": "subreddit",
+				"forUserType": "moderator",
+				"endpoint": "/internal/menu/dev-reset-daily-lock"
 			}
 		]
 	},
