@@ -7,9 +7,10 @@ import { ArrowUp, BookOpenText, ChessQueen, Crown, MoveRight, Trophy, Users } fr
 
 interface SplashProps {
 	onShowLeaderboard: () => void;
+	onShowRules: () => void;
 }
 
-export default function Splash({ onShowLeaderboard }: SplashProps) {
+export default function Splash({ onShowLeaderboard, onShowRules }: SplashProps) {
 	const username = context.username ?? 'Player';
 
 	const handleStartGame = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -80,7 +81,7 @@ export default function Splash({ onShowLeaderboard }: SplashProps) {
 
 				<div className="flex items-center gap-2">
 					<Button
-						onClick={onShowLeaderboard}
+						onClick={onShowRules}
 						variant="outline"
 						size={'sm'}
 						className="text-[0.8rem]"
