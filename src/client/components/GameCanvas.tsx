@@ -404,12 +404,18 @@ const GameCanvas = () => {
 			>
 				<div
 					ref={spinnerRef}
-					className="h-[30px] w-[30px] animate-[rotation_0.8s_linear_infinite] border-[5px] border-[#bdff00] border-t-[#719900] rounded-full m-2.5 p-2.5"
 					id="spinner"
-				/>
-				<div className="size-18 bg-secondary flex items-center justify-center rounded-md">
-					<img src="/chess-pieces/knight.svg" width={64} height={64} className="size-8" />
+					className="mb-8 relative size-18 bg-secondary flex items-center justify-center rounded-md"
+				>
+					<img
+						src="/chess-pieces/knight.svg"
+						width={64}
+						height={64}
+						className="relative z-10 size-8"
+					/>
+					<div className="absolute z-0 top-0 left-0 right-0 bottom-0 rounded-2xl bg-secondary animate-ping" />
 				</div>
+
 				<div
 					ref={statusRef}
 					className="inline-block align-top text-lg m-2.5 p-2.5"
@@ -417,6 +423,7 @@ const GameCanvas = () => {
 				>
 					{statusText}
 				</div>
+
 				<progress
 					ref={progressRef}
 					value={progressValue}
