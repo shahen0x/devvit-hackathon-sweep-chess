@@ -26,6 +26,8 @@ export const useGameModule = ({
 				console.log(text);
 				if (text === 'Entering main loop.') {
 					ensureAspectRatio();
+					// Hide loading screen when game starts
+					onLoadingComplete();
 				}
 			},
 			printErr: (text: string) => {

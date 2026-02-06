@@ -110,12 +110,13 @@ const GameCanvas = () => {
 		<>
 			<canvas
 				ref={canvasRef}
-				className="border-0 bg-black relative my-auto"
+				className={`border-0 outline-0 relative my-auto transition-opacity duration-500 ${
+					isLoading ? 'opacity-0' : 'opacity-100'
+				}`}
 				id="canvas"
 				onContextMenu={(e) => e.preventDefault()}
 				onClick={handleCanvasClick}
 				tabIndex={-1}
-				style={{ display: isLoading ? 'none' : 'block' }}
 			/>
 			<LoadingScreen
 				isVisible={isLoading}

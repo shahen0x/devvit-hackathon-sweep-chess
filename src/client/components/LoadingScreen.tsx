@@ -13,9 +13,10 @@ const LoadingScreen = forwardRef<HTMLDivElement, LoadingScreenProps>(
 		return (
 			<div
 				ref={ref}
-				className="absolute inset-0 flex flex-col justify-center items-center text-center pointer-events-none"
+				className={`absolute inset-0 flex flex-col justify-center items-center text-center pointer-events-none transition-opacity duration-500 ${
+					isVisible ? 'opacity-100' : 'opacity-0'
+				}`}
 				id="loading"
-				style={{ display: isVisible ? 'flex' : 'none' }}
 			>
 				<div
 					id="spinner"
