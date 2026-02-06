@@ -50,13 +50,12 @@
 		"onAppInstall": "/internal/on-app-install"
 	},
 	"scheduler": {
-		"tasks": [
-			{
-				"name": "post-daily-challenge",
+		"tasks": {
+			"post-daily-challenge": {
 				"cron": "0 0 * * *",
 				"endpoint": "/internal/scheduler/post-daily-challenge"
 			}
-		]
+		}
 	},
 	"dev": {
 		"subreddit": "chess_war_dev"
