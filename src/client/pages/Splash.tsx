@@ -20,6 +20,15 @@ const fetchPlayerCount = async () => {
 	return data.playerCount;
 };
 
+const fetchTopPlayer = async () => {
+	const response = await fetch('/api/top-player');
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+	const data = await response.json();
+	return data.topPlayer;
+};
+
 const trackPlayer = async () => {
 	const response = await fetch('/api/track-player', {
 		method: 'POST',
@@ -38,6 +47,12 @@ export default function Splash({ onShowLeaderboard, onShowRules }: SplashProps) 
 	const { data: playerCount = 0 } = useQuery({
 		queryKey: ['playerCount'],
 		queryFn: fetchPlayerCount,
+	});
+
+	// Fetch top player
+	const { data: topPlayer } = useQuery({
+		queryKey: ['topPlayer'],
+		queryFn: fetchTopPlayer,
 	});
 
 	// Track player mutation
@@ -64,10 +79,16 @@ export default function Splash({ onShowLeaderboard, onShowRules }: SplashProps) 
 				<h1 className="text-xl font-bold font-title leading-6">
 					Can you beat this in fewer moves?
 				</h1>
-				{/* <div className="text-xs font-bold font-title text-primary">Hey {username}!</div> */}
-				<div className="text-xs font-medium text-primary">
-					Best: 7 moves by u/NoGoodJeans
-				</div>
+				{topPlayer && topPlayer.totalMoves ? (
+					<div className="text-xs font-medium text-primary">
+						Best: {topPlayer.totalMoves} {topPlayer.totalMoves === 1 ? 'move' : 'moves'}{' '}
+						by u/{topPlayer.username}
+					</div>
+				) : (
+					<div className="text-xs font-medium text-muted-foreground">
+						Be the first to complete this puzzle!
+					</div>
+				)}
 			</header>
 
 			{/* Content */}
