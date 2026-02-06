@@ -30,10 +30,7 @@ const LoadingScreen = forwardRef<HTMLDivElement, LoadingScreenProps>(
 					<div className="absolute z-0 top-0 left-0 right-0 bottom-0 rounded-2xl bg-secondary animate-ping" />
 				</div>
 
-				<div
-					className="inline-block align-top text-lg  text-center m-2.5 p-2.5"
-					id="status"
-				>
+				<div className="inline-block align-top text-center m-2.5 p-2.5" id="status">
 					{statusText}
 				</div>
 
