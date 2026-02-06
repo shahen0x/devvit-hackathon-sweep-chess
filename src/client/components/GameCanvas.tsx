@@ -407,9 +407,12 @@ const GameCanvas = () => {
 					className="h-[30px] w-[30px] animate-[rotation_0.8s_linear_infinite] border-[5px] border-[#bdff00] border-t-[#719900] rounded-full m-2.5 p-2.5"
 					id="spinner"
 				/>
+				<div className="size-18 bg-secondary flex items-center justify-center rounded-md">
+					<img src="/chess-pieces/knight.svg" width={64} height={64} className="size-8" />
+				</div>
 				<div
 					ref={statusRef}
-					className="inline-block align-top font-bold text-white m-2.5 p-2.5"
+					className="inline-block align-top text-lg m-2.5 p-2.5"
 					id="status"
 				>
 					{statusText}
@@ -421,8 +424,8 @@ const GameCanvas = () => {
 					id="progress"
 					hidden={progressHidden}
 					className="w-[250px] h-2.5 appearance-none p-1.25 m-2.5
-                        [&::-webkit-progress-bar]:bg-[#8492a6] [&::-webkit-progress-bar]:h-2.5 [&::-webkit-progress-bar]:rounded-2xl
-                        [&::-webkit-progress-value]:bg-gradient-to-r [&::-webkit-progress-value]:from-[#719900] [&::-webkit-progress-value]:to-[#bdff00] [&::-webkit-progress-value]:h-2.5 [&::-webkit-progress-value]:rounded-2xl"
+                        [&::-webkit-progress-bar]:bg-secondary [&::-webkit-progress-bar]:h-2.5 [&::-webkit-progress-bar]:rounded-2xl
+                        [&::-webkit-progress-value]:bg-primary [&::-webkit-progress-value]:h-2.5 [&::-webkit-progress-value]:rounded-2xl"
 				/>
 			</div>
 		</>
