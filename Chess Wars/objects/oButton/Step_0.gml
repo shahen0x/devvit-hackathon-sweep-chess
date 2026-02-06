@@ -67,9 +67,6 @@ if (highlight_mode && mouse_check_button_pressed(mb_left))
             // Notify oBoard that a piece was created at this square
             oBoard.piece_positions[cell_x][cell_y] = 1;
             
-            // Count placing a piece as a move
-            oBoard.total_moves++;
-            
             // Play spawn sound
             audio_play_sound(sndSpawn, 1, false);
             

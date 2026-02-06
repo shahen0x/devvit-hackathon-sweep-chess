@@ -75,19 +75,6 @@ if (!any_piece_moving && board_data_loaded)
     }
 }
 
-// Handle restart button click during game over
-if (game_over && restart_button_enabled && mouse_check_button_pressed(mb_left))
-{
-    var mx = mouse_x;
-    var my = mouse_y;
-    
-    if (point_in_rectangle(mx, my, restart_button_x, restart_button_y, 
-                          restart_button_x + restart_button_w, restart_button_y + restart_button_h))
-    {
-        room_restart();
-    }
-}
-
 if (!game_over && mouse_check_button_pressed(mb_left))
 {
     // Mouse position
