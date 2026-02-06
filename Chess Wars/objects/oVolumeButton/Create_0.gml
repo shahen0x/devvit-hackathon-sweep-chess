@@ -13,7 +13,7 @@ if (is_muted) {
 
 if (!global.is_mobile) {
 	x = room_width - 70
-	y = 10
+	y = 18
 	image_xscale = 0.4	
 	image_yscale = 0.4
 }

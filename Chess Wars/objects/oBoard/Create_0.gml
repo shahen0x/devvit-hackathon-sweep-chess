@@ -27,8 +27,8 @@ ds_map_destroy(_info);
 
 board = array_create(BOARD_SIZE);
 
-board_offset_x = (room_width - BOARD_SIZE * CELL_SIZE) div 2 + global.board_left_padding;
-board_offset_y = ((room_height - BOARD_SIZE * CELL_SIZE) div 2) + global.board_top_padding;
+board_offset_x = (room_width - BOARD_SIZE * global.cell_size) div 2 + global.board_left_padding;
+board_offset_y = ((room_height - BOARD_SIZE * global.cell_size) div 2) + global.board_top_padding;
 
 // Stats tracking
 total_moves = 0;        // Increments each time player chooses to move a piece
@@ -130,7 +130,7 @@ if (is_reddit_build()) {
 	// TEST BUILD: Spawn random pawns locally
 	debug_log("Test build detected - Spawning random pawns...");
 	
-	var num_pawns = 1; // Change this number to spawn more/fewer pawns
+	var num_pawns = 24; // Change this number to spawn more/fewer pawns
 	var occupied_cells = ds_map_create(); // Track occupied cells
 	occupied_cells[? "0,0"] = true; // Queen's position
 	occupied_cells[? "1,0"] = true; // Rook's position
@@ -161,8 +161,8 @@ if (is_reddit_build()) {
 		if (found_spot)
 		{
 			var new_pawn = instance_create_layer(
-				board_offset_x + spawn_x * CELL_SIZE,
-				board_offset_y + spawn_y * CELL_SIZE,
+				board_offset_x + spawn_x * global.cell_size,
+				board_offset_y + spawn_y * global.cell_size,
 				"Pieces",
 				oPawn
 			);
@@ -170,8 +170,8 @@ if (is_reddit_build()) {
 			new_pawn.cell_x = spawn_x;
 			new_pawn.cell_y = spawn_y;
 			new_pawn.board = id;
-			new_pawn.px = board_offset_x + spawn_x * CELL_SIZE;
-			new_pawn.py = board_offset_y + spawn_y * CELL_SIZE;
+			new_pawn.px = board_offset_x + spawn_x * global.cell_size;
+			new_pawn.py = board_offset_y + spawn_y * global.cell_size;
 			//debug_log("Pawn " + string(i) + " spawned at: " + string(spawn_x) + "," + string(spawn_y));
 		}
 	}
@@ -201,8 +201,8 @@ function spawn_pawns_from_data(_data) {
 						// Invert y: board y=0 should be at bottom (screen y=7), y=7 at top (screen y=0)
 						var _screen_y = 7 - _y;
 						var new_pawn = instance_create_layer(
-							_board_ref.board_offset_x + _x * CELL_SIZE,
-							_board_ref.board_offset_y + _screen_y * CELL_SIZE,
+							_board_ref.board_offset_x + _x * global.cell_size,
+							_board_ref.board_offset_y + _screen_y * global.cell_size,
 							"Pieces",
 							oPawn
 						);
@@ -210,8 +210,8 @@ function spawn_pawns_from_data(_data) {
 						new_pawn.cell_x = _x;
 						new_pawn.cell_y = _screen_y;
 						new_pawn.board = _board_ref;
-						new_pawn.px = _board_ref.board_offset_x + _x * CELL_SIZE;
-						new_pawn.py = _board_ref.board_offset_y + _screen_y * CELL_SIZE;
+						new_pawn.px = _board_ref.board_offset_x + _x * global.cell_size;
+						new_pawn.py = _board_ref.board_offset_y + _screen_y * global.cell_size;
 						//debug_log("Pawn at: " + string(_x) + "," + string(_screen_y));
 					}
 				}

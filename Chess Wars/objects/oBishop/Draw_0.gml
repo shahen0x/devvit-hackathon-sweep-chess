@@ -12,13 +12,13 @@ if (sprite_index != -1)
         }
     }
     
-    // Draw 144x144 sprite stretched to fit CELL_SIZE with spawn animation
+    // Draw 144x144 sprite stretched to fit global.cell_size with spawn animation
     draw_set_color(c_white);
     draw_set_alpha(1);
     
     // Calculate scaled size for spawn animation
-    var scaled_size = CELL_SIZE * spawn_scale * 0.9;
-    var offset = (CELL_SIZE - scaled_size) / 2;
+    var scaled_size = global.cell_size * spawn_scale * 0.9;
+    var offset = (global.cell_size - scaled_size) / 2;
     
     draw_sprite_stretched(sprite_index, image_index, px + offset, py + offset, scaled_size, scaled_size);
 }
@@ -26,6 +26,6 @@ else
 {
     // Draw placeholder rectangle for bishop
     draw_set_color(c_green);
-    draw_rectangle(px, py, px + CELL_SIZE, py + CELL_SIZE, false);
+    draw_rectangle(px, py, px + global.cell_size, py + global.cell_size, false);
     draw_set_color(c_white);
 }

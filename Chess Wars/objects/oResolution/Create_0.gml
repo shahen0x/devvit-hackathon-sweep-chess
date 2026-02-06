@@ -43,14 +43,18 @@ if (is_mobile) {
     show_debug_message("Desktop detected - Room size set to " + string(_width) + "x" + string(_height));
 }
 
+// Cell size
+global.cell_size = is_mobile ? 84 : 78
+
 // Board positioning - padding settings
 global.board_left_padding = is_mobile ? 0 : 0;
-global.board_top_padding = is_mobile ? 50 : 0;
+global.board_top_padding = is_mobile ? 50 : 40;
 
-global.ui_moves_x = is_mobile ?  32 : 14;
-global.ui_moves_y = is_mobile ?  32 : 14;
-global.ui_distance_x = is_mobile ?  32 : 14 + 200;
-global.ui_distance_y = is_mobile ?  32 + 45 : 14;
+global.ui_moves_x = is_mobile ?  32 : 30;
+global.ui_moves_y = is_mobile ?  32 : 30;
+
+global.ui_distance_x = is_mobile ?  32 : 30 + 160;
+global.ui_distance_y = is_mobile ?  32 + 45 : 30;
 
 
 

@@ -8,10 +8,10 @@ if (is_selected && array_length(valid_moves) > 0)
     for (var i = 0; i < array_length(valid_moves); i++)
     {
         var move = valid_moves[i];
-        var cx = board.board_offset_x + move[0] * CELL_SIZE + CELL_SIZE / 2;
-        var cy = board.board_offset_y + move[1] * CELL_SIZE + CELL_SIZE / 2;
-        var cell_x_pos = board.board_offset_x + move[0] * CELL_SIZE;
-        var cell_y_pos = board.board_offset_y + move[1] * CELL_SIZE;
+        var cx = board.board_offset_x + move[0] * global.cell_size + global.cell_size / 2;
+        var cy = board.board_offset_y + move[1] * global.cell_size + global.cell_size / 2;
+        var cell_x_pos = board.board_offset_x + move[0] * global.cell_size;
+        var cell_y_pos = board.board_offset_y + move[1] * global.cell_size;
         
         // Check if there's a pawn at this cell
         var has_pawn = false;
@@ -29,7 +29,7 @@ if (is_selected && array_length(valid_moves) > 0)
             draw_set_color(c_white);
             draw_circle(cx, cy, VALID_MOVE_CIRCLE_RADIUS, false);
         } else {
-            draw_sprite_stretched(sPawnDanger, 0, cell_x_pos, cell_y_pos, CELL_SIZE, CELL_SIZE);
+            draw_sprite_stretched(sPawnDanger, 0, cell_x_pos, cell_y_pos, global.cell_size, global.cell_size);
         }
     }
     

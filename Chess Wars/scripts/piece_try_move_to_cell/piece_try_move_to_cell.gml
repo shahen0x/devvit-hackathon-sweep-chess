@@ -6,8 +6,8 @@ function piece_try_move_to_cell()
     if (!is_selected) return false;
     
     // Convert mouse position to cell coordinates
-    var mouse_cell_x = (mouse_x - board.board_offset_x) div CELL_SIZE;
-    var mouse_cell_y = (mouse_y - board.board_offset_y) div CELL_SIZE;
+    var mouse_cell_x = (mouse_x - board.board_offset_x) div global.cell_size;
+    var mouse_cell_y = (mouse_y - board.board_offset_y) div global.cell_size;
     
     for (var i = 0; i < array_length(valid_moves); i++)
     {
