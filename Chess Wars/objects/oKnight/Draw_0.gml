@@ -6,8 +6,8 @@ if (is_selected && array_length(valid_moves) > 0)
     for (var i = 0; i < array_length(valid_moves); i++)
     {
         var move = valid_moves[i];
-        var cx = board.board_offset_x + move[0] * CELL_SIZE + CELL_SIZE / 2;
-        var cy = board.board_offset_y + move[1] * CELL_SIZE + CELL_SIZE / 2;
+        var cx = board.board_offset_x + move[0] * global.cell_size + global.cell_size / 2;
+        var cy = board.board_offset_y + move[1] * global.cell_size + global.cell_size / 2;
         
         // Check if there's a pawn at this cell
         var has_pawn = false;
@@ -42,13 +42,13 @@ if (sprite_index != -1)
         }
     }
     
-    // Draw 144x144 sprite stretched to fit CELL_SIZE with spawn animation
+    // Draw 144x144 sprite stretched to fit global.cell_size with spawn animation
     draw_set_color(c_white);
     draw_set_alpha(1);
     
     // Calculate scaled size for spawn animation
-    var scaled_size = CELL_SIZE * spawn_scale * 0.9;
-    var offset = (CELL_SIZE - scaled_size) / 2;
+    var scaled_size = global.cell_size * spawn_scale * 0.9;
+    var offset = (global.cell_size - scaled_size) / 2;
     
     draw_sprite_stretched(sprite_index, image_index, px + offset, py + offset, scaled_size, scaled_size);
 }
@@ -56,6 +56,6 @@ else
 {
     // Draw placeholder rectangle for knight
     draw_set_color(c_orange);
-    draw_rectangle(px, py, px + CELL_SIZE, py + CELL_SIZE, false);
+    draw_rectangle(px, py, px + global.cell_size, py + global.cell_size, false);
     draw_set_color(c_white);
 }

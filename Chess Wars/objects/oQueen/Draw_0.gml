@@ -9,12 +9,12 @@ if (spawn_animating)
     }
 }
 
-// Draw 144x144 sprite stretched to fit CELL_SIZE with spawn animation
+// Draw 144x144 sprite stretched to fit global.cell_size with spawn animation
 draw_set_color(c_white);
 draw_set_alpha(1);
 
 // Calculate scaled size for spawn animation
-var scaled_size = CELL_SIZE * spawn_scale * 0.9;
-var offset = (CELL_SIZE - scaled_size) / 2;
+var scaled_size = global.cell_size * spawn_scale * 0.9;
+var offset = (global.cell_size - scaled_size) / 2;
 
 draw_sprite_stretched(sprite_index, image_index, px + offset, py + offset, scaled_size, scaled_size);

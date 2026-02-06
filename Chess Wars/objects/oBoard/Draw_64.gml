@@ -55,20 +55,20 @@ if (any_highlight_mode)
             
             if (is_valid)
             {
-                var cx = board_offset_x + hor * CELL_SIZE + CELL_SIZE / 2;
-                var cy = board_offset_y + vert * CELL_SIZE + CELL_SIZE / 2;
-                var cell_x_pos = board_offset_x + hor * CELL_SIZE;
-                var cell_y_pos = board_offset_y + vert * CELL_SIZE;
+                var cx = board_offset_x + hor * global.cell_size + global.cell_size / 2;
+                var cy = board_offset_y + vert * global.cell_size + global.cell_size / 2;
+                var cell_x_pos = board_offset_x + hor * global.cell_size;
+                var cell_y_pos = board_offset_y + vert * global.cell_size;
                 
                 // If no pawn -> draw white circle, else draw sPawnDanger sprite
                 if (!has_pawn) {
-                    var sprite_size = CELL_SIZE / 3.8;
-                    var offset_x = (CELL_SIZE - sprite_size) / 2;
-                    var offset_y = (CELL_SIZE - sprite_size) / 2;
+                    var sprite_size = global.cell_size / 3.8;
+                    var offset_x = (global.cell_size - sprite_size) / 2;
+                    var offset_y = (global.cell_size - sprite_size) / 2;
                     draw_sprite_stretched(sSpawnPoint, 0, cell_x_pos + offset_x, cell_y_pos + offset_y, sprite_size, sprite_size);
                 } else {
 					draw_set_alpha(1.0)
-                    draw_sprite_stretched(sPawnDanger, 0, cell_x_pos, cell_y_pos, CELL_SIZE, CELL_SIZE);
+                    draw_sprite_stretched(sPawnDanger, 0, cell_x_pos, cell_y_pos, global.cell_size, global.cell_size);
                 }
             }
         }

@@ -3,8 +3,8 @@
 /// @returns {Bool} True if the piece is being clicked
 function piece_is_clicked()
 {
-    var piece_px = board.board_offset_x + cell_x * CELL_SIZE;
-    var piece_py = board.board_offset_y + cell_y * CELL_SIZE;
+    var piece_px = board.board_offset_x + cell_x * global.cell_size;
+    var piece_py = board.board_offset_y + cell_y * global.cell_size;
     
-    return point_in_rectangle(mouse_x, mouse_y, piece_px, piece_py, piece_px + CELL_SIZE, piece_py + CELL_SIZE);
+    return point_in_rectangle(mouse_x, mouse_y, piece_px, piece_py, piece_px + global.cell_size, piece_py + global.cell_size);
 }
