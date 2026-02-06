@@ -20,7 +20,7 @@ router.get('/api/leaderboard', async (req: Request, res: Response): Promise<void
 			return;
 		}
 
-		const limit = 50;
+		const limit = 5;
 		const leaderboardKey = `leaderboard:${postId}`;
 
 		// Fetch top 50 users with scores
