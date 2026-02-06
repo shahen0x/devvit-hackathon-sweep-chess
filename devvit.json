@@ -24,18 +24,18 @@
 	"menu": {
 		"items": [
 			{
-				"label": "Create a new post",
-				"description": "chess-war",
+				"label": "📅 Post Daily Challenge",
+				"description": "Create a new daily chess puzzle challenge",
 				"location": "subreddit",
 				"forUserType": "moderator",
-				"endpoint": "/internal/menu/post-create"
+				"endpoint": "/internal/menu/daily-challenge-create"
 			},
 			{
-				"label": "Create Level Creator Post",
-				"description": "Create a post for building custom chess levels",
+				"label": "🎨 Post Level Creator",
+				"description": "Create a post where users can build custom puzzles",
 				"location": "subreddit",
 				"forUserType": "moderator",
-				"endpoint": "/internal/menu/creator-create"
+				"endpoint": "/internal/menu/level-creator-create"
 			}
 		]
 	},
