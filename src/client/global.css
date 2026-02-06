@@ -185,3 +185,27 @@
 		transform: translateY(-8px);
 	}
 }
+
+@keyframes dash {
+	0% {
+		stroke-dashoffset: 0;
+	}
+
+	100% {
+		stroke-dashoffset: -280;
+	}
+}
+
+@keyframes flip-horizontal {
+	0% {
+		transform: scaleX(1);
+	}
+
+	50% {
+		transform: scaleX(-1);
+	}
+
+	100% {
+		transform: scaleX(1);
+	}
+}

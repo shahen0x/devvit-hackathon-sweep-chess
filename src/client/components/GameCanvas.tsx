@@ -409,9 +409,9 @@ const GameCanvas = () => {
 				>
 					<img
 						src="/chess-pieces/knight.svg"
-						width={64}
-						height={64}
-						className="relative z-10 size-8"
+						width={80}
+						height={80}
+						className="relative z-10 size-10 animate-[flip-horizontal_1.6s_ease-in-out_infinite]"
 					/>
 					<div className="absolute z-0 top-0 left-0 right-0 bottom-0 rounded-2xl bg-secondary animate-ping" />
 				</div>
