@@ -7,6 +7,7 @@ import deleteScore from './delete-score';
 import trackPlayer from './track-player';
 import playerCount from './player-count';
 import topPlayer from './top-player';
+import createPuzzle from './create-puzzle';
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.use(deleteScore);
 router.use(trackPlayer);
 router.use(playerCount);
 router.use(topPlayer);
+router.use(createPuzzle);
 
 export default router;
