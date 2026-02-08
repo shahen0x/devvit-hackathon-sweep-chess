@@ -20,7 +20,7 @@ export default function Rules({ onBack }: RulesProps) {
 			</header>
 
 			{/* Content */}
-			<div className="w-full h-[calc(100%-84px)] space-y-3 flex flex-col justify-center">
+			<div className="w-full h-[calc(100%-84px)] space-y-3 flex flex-col">
 				<div className="w-full px-4 py-3 bg-secondary rounded-lg border">
 					<h3 className="font-semibold mb-1">Objective</h3>
 					<p className="text-sm text-muted-foreground">

@@ -1,57 +1,84 @@
-import { useMemo } from 'react';
-import { Chessboard } from 'react-chessboard';
+import { useMemo, useState, useEffect, useCallback } from 'react';
+import Chessboard from './Chessboard';
 import { context } from '@devvit/web/client';
 
 export default function ChessboardPreview() {
 	const board = context.postData?.board as number[][] | undefined;
+	// Only show loading if board data is not immediately available
+	const [showLoading, setShowLoading] = useState(!board);
+	const [fadeOut, setFadeOut] = useState(false);
 
-	// Custom piece components
-	const customPieces = useMemo(
-		() => ({
-			bP: () => (
-				<img src="/chess-pieces/pawn.svg" alt="pawn" className="w-full h-full p-0.5" />
-			),
-		}),
-		[]
-	);
+	// Hide loading when board data becomes available
+	useEffect(() => {
+		if (board && showLoading) {
+			// Start fade out when data arrives
+			setFadeOut(true);
 
-	// Convert board array to chess position object
-	const boardPosition = useMemo(() => {
-		if (!board) return {};
+			// Remove overlay after fade completes
+			const hideTimer = setTimeout(() => {
+				setShowLoading(false);
+			}, 300); // Match the fade duration
 
-		const position: Record<string, { pieceType: string }> = {};
-		const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-
-		// Place pawns based on board data
-		// board[x][y] where board[x] is the column array, y is the row index
-		// board[0] = column 'a', board[1] = column 'b', etc.
-		// board[x][0] = rank 1, board[x][7] = rank 8
-		for (let x = 0; x < 8; x++) {
-			const file = files[x];
-			for (let y = 0; y < 8; y++) {
-				if (board[x]?.[y] === 1) {
-					const rank = y + 1; // y=0 -> rank 1, y=7 -> rank 8
-					position[`${file}${rank}`] = { pieceType: 'bP' }; // Black pawn
-				}
-			}
+			return () => clearTimeout(hideTimer);
 		}
+	}, [board, showLoading]);
 
-		return position;
+	// Create empty board for loading state
+	const displayBoard = useMemo(() => {
+		if (board) {
+			return board;
+		}
+		// Return empty 8x8 board while loading
+		return Array(8)
+			.fill(0)
+			.map(() => Array(8).fill(0));
 	}, [board]);
 
+	// Render pawn piece
+	const renderPiece = useCallback((pieceValue: number) => {
+		if (pieceValue === 1) {
+			return (
+				<img
+					src="/chess-pieces/pawn.svg"
+					alt="pawn"
+					className="w-[70%] h-[70%] pointer-events-none select-none"
+					draggable={false}
+				/>
+			);
+		}
+		return null;
+	}, []);
+
 	return (
-		<Chessboard
-			options={{
-				position: boardPosition,
-				allowDragging: false,
-				boardStyle: {
-					border: '1px solid #D9BE9E',
-				},
-				lightSquareStyle: { backgroundColor: '#EDD6BB' },
-				darkSquareStyle: { backgroundColor: '#D9BE9E' },
-				pieces: customPieces,
-				showNotation: false,
-			}}
-		/>
+		<div className="relative">
+			<Chessboard board={displayBoard} renderPiece={renderPiece} interactive={false} />
+
+			{/* Loading overlay with animated dots */}
+			{showLoading && (
+				<div
+					className={`absolute inset-0 pointer-events-none grid grid-cols-8 grid-rows-8 transition-opacity duration-300 ${
+						fadeOut ? 'opacity-0' : 'opacity-100'
+					}`}
+				>
+					{Array.from({ length: 64 }).map((_, index) => {
+						const row = Math.floor(index / 8);
+						const col = index % 8;
+						const delay = (row + col) * 0.03; // Faster diagonal wave
+
+						return (
+							<div key={index} className="flex items-center justify-center">
+								<div
+									className="w-2 h-2 bg-black/30 rounded-full animate-pulse"
+									style={{
+										animationDelay: `${delay}s`,
+										animationDuration: '1s',
+									}}
+								/>
+							</div>
+						);
+					})}
+				</div>
+			)}
+		</div>
 	);
 }
