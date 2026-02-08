@@ -1,8 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation } from '@tanstack/react-query';
-import { RotateCcw, Send } from 'lucide-react';
-import CreatorBoard from '@/components/CreatorBoard';
+import Chessboard from '@/components/Chessboard';
 import { navigateTo } from '@devvit/web/client';
 
 const BOARD_SIZE = 8;
@@ -113,6 +112,31 @@ export default function Creator() {
 		submitBoardMutation.mutate(board);
 	};
 
+	// Render pawn piece
+	const renderPiece = useCallback((pieceValue: number) => {
+		if (pieceValue === 1) {
+			return (
+				<img
+					src="/chess-pieces/pawn.svg"
+					alt="pawn"
+					className="w-[70%] h-[70%] pointer-events-none select-none"
+					draggable={false}
+				/>
+			);
+		}
+		return null;
+	}, []);
+
+	// Render empty square with placement dot
+	const renderEmptySquare = useCallback(() => {
+		if (pawnCount < MAX_PAWNS) {
+			return (
+				<div className="w-3 h-3 rounded-full bg-white/50 group-hover:bg-black/60 transition-colors duration-100 pointer-events-none" />
+			);
+		}
+		return null;
+	}, [pawnCount]);
+
 	return (
 		<div className="relative h-screen bg-background pt-6 flex flex-col gap-4 px-4 pb-4">
 			{/* Chessboard */}
@@ -122,10 +146,12 @@ export default function Creator() {
 				</h1>
 
 				<div className="w-full max-w-88 relative">
-					<CreatorBoard
+					<Chessboard
 						board={board}
 						onSquareClick={handleSquareClick}
-						isMaxPawns={pawnCount >= MAX_PAWNS}
+						renderPiece={renderPiece}
+						renderEmptySquare={renderEmptySquare}
+						interactive={true}
 					/>
 					{/* Overlay to prevent interaction while submitting */}
 					{submitBoardMutation.isPending && (
