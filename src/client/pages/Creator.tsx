@@ -82,13 +82,13 @@ export default function Creator() {
 
 			if (!response.ok) {
 				const error = await response.json();
-				throw new Error(error.message || 'Failed to create puzzle');
+				throw new Error(error.message || 'Failed to create level');
 			}
 
 			return response.json();
 		},
 		onSuccess: (data) => {
-			console.log('Puzzle created successfully:', data);
+			console.log('Level created successfully:', data);
 			// Navigate to the newly created post using devvit navigation
 			if (data.postUrl) {
 				navigateTo({ url: data.postUrl });
@@ -115,47 +115,13 @@ export default function Creator() {
 
 	return (
 		<div className="relative h-screen bg-background pt-6 flex flex-col gap-4 px-4 pb-4">
-			{/* Header */}
-			<header className="flex justify-between">
-				{/* Pawn Counter */}
-				<div className="text-center">
-					<div className="inline-flex items-center gap-2 px-4 py-2 bg-muted rounded-lg">
-						<img src="/chess-pieces/pawn.svg" alt="pawn" className="w-5 h-5" />
-						<span className="text-sm font-bold">
-							{pawnCount} / {MAX_PAWNS}
-						</span>
-					</div>
-				</div>
-
-				{/* Action Buttons */}
-				<div className="flex gap-2">
-					<Button
-						onClick={handleClear}
-						variant="outline"
-						className="flex-1"
-						disabled={pawnCount === 0 || submitBoardMutation.isPending}
-					>
-						<RotateCcw /> Clear
-					</Button>
-					<Button
-						onClick={handleSubmit}
-						className="flex-1"
-						disabled={pawnCount !== MAX_PAWNS || submitBoardMutation.isPending}
-					>
-						{submitBoardMutation.isPending ? (
-							'Creating Level...'
-						) : (
-							<>
-								<Send /> Create Level
-							</>
-						)}
-					</Button>
-				</div>
-			</header>
-
 			{/* Chessboard */}
-			<div className="flex-1 flex items-center justify-center">
-				<div className="w-full max-w-sm relative">
+			<div className="flex-1 flex flex-col gap-6 items-center">
+				<h1 className="font-title text-center text-xl font-bold">
+					Place Pawns on the board
+				</h1>
+
+				<div className="w-full max-w-88 relative">
 					<CreatorBoard
 						board={board}
 						onSquareClick={handleSquareClick}
@@ -171,6 +137,38 @@ export default function Creator() {
 					)}
 				</div>
 			</div>
+
+			{/* Footer */}
+			<footer className="flex justify-between">
+				{/* Pawn Counter */}
+				<div className="text-center">
+					<div className="inline-flex items-center gap-1 px-2 py-2 bg-secondary rounded-md">
+						<img src="/chess-pieces/pawn.svg" alt="pawn" className="w-5 h-5" />
+						<span className="text-sm font-bold">
+							{pawnCount} / {MAX_PAWNS}
+						</span>
+					</div>
+				</div>
+
+				{/* Action Buttons */}
+				<div className="flex gap-2">
+					<Button
+						onClick={handleClear}
+						variant="outline"
+						className="flex-1"
+						disabled={pawnCount === 0 || submitBoardMutation.isPending}
+					>
+						Clear
+					</Button>
+					<Button
+						onClick={handleSubmit}
+						className="flex-1"
+						disabled={pawnCount !== MAX_PAWNS || submitBoardMutation.isPending}
+					>
+						{submitBoardMutation.isPending ? 'Creating Level...' : <>Create Level</>}
+					</Button>
+				</div>
+			</footer>
 		</div>
 	);
 }
