@@ -69,7 +69,7 @@ export const createUserPuzzlePost = async (board: number[][], username: string) 
 	// Create the post
 	const post = await reddit.submitCustomPost({
 		subredditName: subredditName,
-		title: `Community Challenge #${puzzleNumber} by u/${username}`,
+		title: `Special Challenge by u/${username}`,
 		entry: 'default',
 		postData: {
 			gameId: `community-${puzzleNumber}`,
