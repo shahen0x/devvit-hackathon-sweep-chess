@@ -1,4 +1,4 @@
-const GAME_NAME = "Chess War";
+const GAME_NAME = "sweep-chess";
 const GAME_VERSION = "0.0.0.0";
 
 const CACHE_NAME = JSON.stringify({"name": GAME_NAME, "version": GAME_VERSION});
