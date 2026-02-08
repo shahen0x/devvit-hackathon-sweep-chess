@@ -110,7 +110,7 @@ const GameCanvas = () => {
 		<>
 			<canvas
 				ref={canvasRef}
-				className={`border-0 outline-0 relative my-auto transition-opacity duration-500 ${
+				className={`h-auto! border-0 outline-0 relative my-auto transition-opacity duration-500 ${
 					isLoading ? 'opacity-0' : 'opacity-100'
 				}`}
 				id="canvas"
