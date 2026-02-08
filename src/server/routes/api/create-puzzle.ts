@@ -63,14 +63,14 @@ router.post('/api/create-puzzle', async (req, res) => {
 			success: true,
 			postId: post.id,
 			postUrl: postUrl,
-			message: 'Puzzle created successfully!',
+			message: 'Level created successfully!',
 		};
 
 		res.json(response);
 	} catch (error) {
-		console.error('Error creating puzzle:', error);
+		console.error('Error creating level:', error);
 		res.status(500).json({
-			error: 'Failed to create puzzle',
+			error: 'Failed to create level',
 			message: error instanceof Error ? error.message : 'Unknown error',
 		});
 	}

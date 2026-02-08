@@ -86,7 +86,7 @@ export default function Splash({ onShowLeaderboard, onShowRules }: SplashProps) 
 					</div>
 				) : (
 					<div className="text-xs font-medium text-muted-foreground">
-						Be the first to complete this puzzle!
+						Be the first to complete this level!
 					</div>
 				)}
 			</header>
@@ -163,7 +163,7 @@ export default function Splash({ onShowLeaderboard, onShowRules }: SplashProps) 
 			</footer>
 
 			{/* Dev Tools */}
-			<DevBox />
+			{/* <DevBox /> */}
 		</div>
 	);
 }
