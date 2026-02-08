@@ -1,5 +1,5 @@
-import { useMemo, useState, useEffect } from 'react';
-import { Chessboard } from 'react-chessboard';
+import { useMemo, useState, useEffect, useCallback } from 'react';
+import Chessboard from './Chessboard';
 import { context } from '@devvit/web/client';
 
 export default function ChessboardPreview() {
@@ -23,53 +23,35 @@ export default function ChessboardPreview() {
 		}
 	}, [board, showLoading]);
 
-	// Custom piece components
-	const customPieces = useMemo(
-		() => ({
-			bP: () => (
-				<img src="/chess-pieces/pawn.svg" alt="pawn" className="w-full h-full p-0.5" />
-			),
-		}),
-		[]
-	);
-
-	// Convert board array to chess position object
-	const boardPosition = useMemo(() => {
-		const position: Record<string, { pieceType: string }> = {};
-		const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-
-		// Always prepare the board data, but only show when loading is done
+	// Create empty board for loading state
+	const displayBoard = useMemo(() => {
 		if (board) {
-			// Real board data: place pawns based on board data
-			for (let x = 0; x < 8; x++) {
-				const file = files[x];
-				for (let y = 0; y < 8; y++) {
-					if (board[x]?.[y] === 1) {
-						const rank = y + 1;
-						position[`${file}${rank}`] = { pieceType: 'bP' };
-					}
-				}
-			}
+			return board;
 		}
-
-		return position;
+		// Return empty 8x8 board while loading
+		return Array(8)
+			.fill(0)
+			.map(() => Array(8).fill(0));
 	}, [board]);
+
+	// Render pawn piece
+	const renderPiece = useCallback((pieceValue: number) => {
+		if (pieceValue === 1) {
+			return (
+				<img
+					src="/chess-pieces/pawn.svg"
+					alt="pawn"
+					className="w-[70%] h-[70%] pointer-events-none select-none"
+					draggable={false}
+				/>
+			);
+		}
+		return null;
+	}, []);
 
 	return (
 		<div className="relative">
-			<Chessboard
-				options={{
-					position: boardPosition,
-					allowDragging: false,
-					boardStyle: {
-						border: '1px solid #D9BE9E',
-					},
-					lightSquareStyle: { backgroundColor: '#EDD6BB' },
-					darkSquareStyle: { backgroundColor: '#D9BE9E' },
-					pieces: customPieces,
-					showNotation: false,
-				}}
-			/>
+			<Chessboard board={displayBoard} renderPiece={renderPiece} interactive={false} />
 
 			{/* Loading overlay with animated dots */}
 			{showLoading && (

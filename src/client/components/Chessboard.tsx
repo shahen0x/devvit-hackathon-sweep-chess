@@ -77,7 +77,7 @@ function Chessboard({
 }: ChessboardProps) {
 	return (
 		<div
-			className={`w-full aspect-square grid grid-cols-8 grid-rows-8 border border-[#D9BE9E] ${className}`}
+			className={`w-full aspect-square grid grid-cols-8 grid-rows-8 border-2 border-[#D9BE9E] ${className}`}
 			style={{ touchAction: 'none' }}
 		>
 			{Array.from({ length: 8 }).map((_, rankIndex) => {
