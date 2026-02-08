@@ -47,11 +47,37 @@ export const createLevelCreatorPost = async () => {
 
 	return await reddit.submitCustomPost({
 		subredditName: subredditName,
-		title: 'Create Your Own Chess Puzzle',
+		title: 'Create Your Own Sweep Chess Level',
 		entry: 'creator',
 		postData: {
 			type: 'creator',
 			// Add any initial creator data here
 		},
 	});
+};
+
+export const createUserPuzzlePost = async (board: number[][], username: string) => {
+	const { subredditName } = context;
+
+	if (!subredditName) {
+		throw new Error('subredditName is required');
+	}
+
+	// Get and increment the puzzle counter
+	const puzzleNumber = await redis.incrBy('puzzle:counter', 1);
+
+	// Create the post
+	const post = await reddit.submitCustomPost({
+		subredditName: subredditName,
+		title: `Special Challenge by u/${username}`,
+		entry: 'default',
+		postData: {
+			gameId: `community-${puzzleNumber}`,
+			board: board,
+			createdBy: username,
+			createdAt: new Date().toISOString(),
+		},
+	});
+
+	return post;
 };
