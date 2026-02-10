@@ -19,7 +19,7 @@ The twist? Pawns don't block movement. When a piece moves, it sweeps through and
 
 ### Custom Level Creator
 
--   **Build Your Own Puzzles**: Place up to 24 pawns anywhere on the board
+-   **Build Your Own Puzzles**: Place 24 pawns anywhere on the board
 -   **Instant Publishing**: Custom levels are automatically posted to Reddit as playable challenges
 -   **Community Content**: Share your creations and challenge other players
 
@@ -119,12 +119,6 @@ Publish to production:
 ```bash
 npm run launch
 ```
-
-## Game Design
-
-Sweep Chess was designed to feel immediately familiar while playing completely differently from traditional chess. By removing the opponent and focusing purely on optimization, the game becomes a spatial puzzle rather than a strategic duel.
-
-The daily challenge format creates a shared experience where players can discuss strategies and compete for the best solution. The custom level creator extends this by letting the community design and share their own puzzles.
 
 ## License
 
