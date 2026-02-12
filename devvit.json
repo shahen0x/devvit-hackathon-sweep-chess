@@ -1,6 +1,6 @@
 {
 	"$schema": "https://developers.reddit.com/schema/config-file.v1.json",
-	"name": "sweep-chess-mvp",
+	"name": "sweep-chess",
 	"post": {
 		"dir": "dist/client",
 		"entrypoints": {
@@ -58,6 +58,6 @@
 		}
 	},
 	"dev": {
-		"subreddit": "sweep_chess_mvp_dev"
+		"subreddit": "sweep_chess_dev"
 	}
 }

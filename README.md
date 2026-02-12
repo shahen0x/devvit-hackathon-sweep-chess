@@ -13,7 +13,7 @@ The twist? Pawns don't block movement. When a piece moves, it sweeps through and
 ### Daily Challenges
 
 -   **Deterministic Puzzles**: Every player gets the same board each day, generated from the post date as a seed
--   **Global Competition**: Compete on a leaderboard ranked by fewest moves and shortest distance traveled
+-   **Competitions**: Compete on a leaderboard ranked by fewest moves and shortest distance traveled
 -   **Unlimited Attempts**: Replay the daily puzzle as many times as you want to find the optimal solution
 -   **Automatic Posts**: New challenges are automatically posted daily via scheduled tasks
 
@@ -38,93 +38,18 @@ The twist? Pawns don't block movement. When a piece moves, it sweeps through and
 -   **User Identity**: Automatic player tracking and personalized leaderboards
 -   **Persistent Scores**: Redis-backed storage keeps only your best daily result
 
-## How It Works
+## How To Play
 
-The game is built using:
+### Objective
 
--   **GameMaker Studio**: Core game logic and rendering, exported to HTML5/WASM
--   **Devvit**: Reddit's platform for custom post experiences
--   **React + TypeScript**: UI components for splash screen, leaderboard, and creator
--   **Redis**: Score storage and leaderboard management
--   **Vite**: Build tooling for client and server bundles
+Clear the board by capturing all pieces using fewer moves and less distance(cells).
 
-The board generation uses a seeded random number generator based on the UTC date, ensuring every player worldwide sees the same puzzle on the same day.
+### How to Play
 
-## Project Structure
-
-```
-sweep-chess-mvp/
-├── gamemaker/          # GameMaker Studio project files
-│   ├── objects/        # Game objects (pieces, board, UI)
-│   ├── scripts/        # Game logic and utilities
-│   ├── sprites/        # Visual assets
-│   └── sounds/         # Audio files
-├── src/
-│   ├── client/         # React frontend
-│   │   ├── pages/      # Splash, Leaderboard, Rules, Creator
-│   │   ├── components/ # Reusable UI components
-│   │   └── public/     # GameMaker WASM output
-│   ├── server/         # Express backend for Devvit
-│   │   ├── routes/     # API and internal endpoints
-│   │   └── utils/      # Board generation logic
-│   └── shared/         # Shared types
-└── game-sprites/       # Source sprite assets
-```
-
-## Development
-
-### Prerequisites
-
--   Node.js 18+
--   GameMaker Studio (for game modifications)
--   Reddit Developer Account
--   Devvit CLI
-
-### Setup
-
-1. Install dependencies:
-
-```bash
-npm install
-```
-
-2. Build the project:
-
-```bash
-npm run build
-```
-
-3. Run in development mode:
-
-```bash
-npm run dev
-```
-
-This starts three concurrent processes:
-
--   Client build watcher
--   Server build watcher
--   Devvit playtest server
-
-### Deployment
-
-Deploy to Reddit:
-
-```bash
-npm run deploy
-```
-
-Publish to production:
-
-```bash
-npm run launch
-```
-
-## Game Design
-
-Sweep Chess was designed to feel immediately familiar while playing completely differently from traditional chess. By removing the opponent and focusing purely on optimization, the game becomes a spatial puzzle rather than a strategic duel.
-
-The daily challenge format creates a shared experience where players can discuss strategies and compete for the best solution. The custom level creator extends this by letting the community design and share their own puzzles.
+-   Any white piece can be placed on an empty cell.
+-   The Knight can be placed on a pawn, capturing it.
+-   Valid moves are highlighted.
+-   Pawns do not block movement. Pieces pass through and wipe them.
 
 ## License
 
