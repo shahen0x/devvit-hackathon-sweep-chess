@@ -23,8 +23,9 @@ router.get('/api/leaderboard', async (req: Request, res: Response): Promise<void
 		const limit = 5;
 		const leaderboardKey = `leaderboard:${postId}`;
 
-		// Fetch top 50 users with scores
-		const entries = await redis.zRange(leaderboardKey, 0, limit - 1);
+		// Fetch top 5 users with highest scores (fewest moves = highest score)
+		// Then reverse so highest score is first (rank 1)
+		const entries = (await redis.zRange(leaderboardKey, -limit, -1)).reverse();
 
 		// If no entries, return empty array
 		if (!entries || entries.length === 0) {
@@ -33,12 +34,10 @@ router.get('/api/leaderboard', async (req: Request, res: Response): Promise<void
 			return;
 		}
 
-		// Reverse to get highest scores first
-		const sortedEntries = [...entries].reverse();
 
 		// Fetch user metadata and stats in parallel
 		const leaderboard = await Promise.all(
-			sortedEntries.map(async (entry, index) => {
+			entries.map(async (entry, index) => {
 				const userId = entry.member;
 				const userKey = `user:${userId}`;
 				const statsKey = `user:${userId}:stats:${postId}`;
