@@ -19,7 +19,7 @@ The twist? Pawns don't block movement. When a piece moves, it sweeps through and
 
 ### Custom Level Creator
 
--   **Build Your Own Puzzles**: Place up to 24 pawns anywhere on the board
+-   **Build Your Own Puzzles**: Place 24 pawns anywhere on the board
 -   **Instant Publishing**: Custom levels are automatically posted to Reddit as playable challenges
 -   **Community Content**: Share your creations and challenge other players
 
